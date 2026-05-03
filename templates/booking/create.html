@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Записаться на массаж{% endblock %}
+
+{% block content %}
+
+<section style="padding: 80px 40px; max-width: 600px; margin: 0 auto;">
+    <p style="color: #c9a96e; letter-spacing: 4px; font-size: 13px; margin-bottom: 15px; text-align: center;">
+        ОНЛАЙН-ЗАПИСЬ
+    </p>
+    <h1 style="text-align: center; font-size: 42px; font-weight: 300; margin-bottom: 50px;">
+        Записаться на сеанс
+    </h1>
+
+    {% if user.is_authenticated %}
+    <form method="post" style="display: grid; gap: 20px;">
+        {% csrf_token %}
+
+        {% for field in form %}
+        <div>
+            <label style="display: block; color: #c9a96e; font-size: 13px; letter-spacing: 2px; margin-bottom: 8px;">
+                {{ field.label|upper }}
+            </label>
+            {{ field }}
+            {% if field.errors %}
+                <p style="color: #e74c3c; font-size: 13px; margin-top: 5px;">
+                    {{ field.errors.0 }}
+                </p>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <button type="submit" class="btn" style="margin-top: 10px; width: 100%; padding: 15px;">
+            Отправить заявку
+        </button>
+    </form>
+
+    {% else %}
+    <div style="text-align: center; background: #1a1a1a; padding: 40px; border: 1px solid #2a2a2a;">
+        <p style="color: #888; margin-bottom: 25px; font-size: 16px;">
+            Для записи необходимо войти в аккаунт
+        </p>
+        <a href="/accounts/login/?next=/booking/" class="btn">Войти</a>
+    </div>
+    {% endif %}
+
+</section>
+
+{% endblock %}

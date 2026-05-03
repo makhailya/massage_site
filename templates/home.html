@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Массаж Илья Маханек{% endblock %}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: #0f0f0f;
+            color: #e8e0d5;
+        }
+
+        nav {
+            background: #1a1a1a;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
+
+        nav .logo {
+            font-size: 22px;
+            color: #c9a96e;
+            letter-spacing: 2px;
+        }
+
+        nav a {
+            color: #e8e0d5;
+            text-decoration: none;
+            margin-left: 30px;
+            font-size: 15px;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover { color: #c9a96e; }
+
+        .btn {
+            background: #c9a96e;
+            color: #0f0f0f;
+            padding: 12px 30px;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            letter-spacing: 1px;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.3s;
+        }
+
+        .btn:hover { background: #b8955a; }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: #1a1a1a;
+            color: #666;
+            margin-top: 60px;
+            border-top: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <span class="logo">✦ МАССАЖ</span>
+    <div>
+        <a href="/">Главная</a>
+        <a href="/services/">Услуги</a>
+        <a href="/booking/">Записаться</a>
+    </div>
+</nav>
+
+{% block content %}{% endblock %}
+
+<footer>
+    <p>© 2025 Илья Маханек · Верхняя Пышма · Массаж на дому и с выездом</p>
+</footer>
+
+</body>
+</html>

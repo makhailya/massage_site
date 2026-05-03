@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Услуги и цены{% endblock %}
+
+{% block content %}
+
+<section style="padding: 80px 40px; max-width: 900px; margin: 0 auto;">
+    <p style="color: #c9a96e; letter-spacing: 4px; font-size: 13px; margin-bottom: 15px; text-align: center;">
+        УСЛУГИ И ЦЕНЫ
+    </p>
+    <h1 style="text-align: center; font-size: 42px; font-weight: 300; margin-bottom: 60px;">
+        Виды массажа
+    </h1>
+
+    <div style="display: grid; gap: 25px;">
+        {% for service in services %}
+        <div style="
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            padding: 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: border-color 0.3s;
+        ">
+            <div>
+                <h2 style="font-size: 24px; font-weight: 400; margin-bottom: 10px;">
+                    {{ service.name }}
+                </h2>
+                <p style="color: #888; line-height: 1.6; max-width: 500px;">
+                    {{ service.description }}
+                </p>
+                <p style="color: #c9a96e; margin-top: 10px; font-size: 14px;">
+                    ⏱ {{ service.duration }} минут
+                </p>
+            </div>
+            <div style="text-align: right; min-width: 150px;">
+                <p style="font-size: 32px; color: #c9a96e; margin-bottom: 15px;">
+                    {{ service.price }} ₽
+                </p>
+                <a href="/booking/" class="btn">Записаться</a>
+            </div>
+        </div>
+        {% empty %}
+        <p style="text-align: center; color: #666;">Услуги скоро появятся</p>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

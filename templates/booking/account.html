@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Личный кабинет{% endblock %}
+
+{% block content %}
+
+<section style="padding: 80px 40px; max-width: 800px; margin: 0 auto;">
+    <p style="color: #c9a96e; letter-spacing: 4px; font-size: 13px; margin-bottom: 15px;">
+        ЛИЧНЫЙ КАБИНЕТ
+    </p>
+    <h1 style="font-size: 42px; font-weight: 300; margin-bottom: 10px;">
+        Привет, {{ user.username }}!
+    </h1>
+    <p style="color: #666; margin-bottom: 50px;">Ваши записи на массаж</p>
+
+    {% if bookings %}
+    <div style="display: grid; gap: 20px;">
+        {% for booking in bookings %}
+        <div style="
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            padding: 25px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        ">
+            <div>
+                <h3 style="font-size: 20px; font-weight: 400; margin-bottom: 8px;">
+                    {{ booking.service.name }}
+                </h3>
+                <p style="color: #888;">
+                    📅 {{ booking.date }} в {{ booking.time }}
+                </p>
+                {% if booking.comment %}
+                <p style="color: #666; font-size: 14px; margin-top: 8px;">
+                    💬 {{ booking.comment }}
+                </p>
+                {% endif %}
+            </div>
+            <div style="text-align: right;">
+                {% if booking.status == 'pending' %}
+                    <span style="color: #f39c12; font-size: 13px; letter-spacing: 1px;">
+                        ⏳ ОЖИДАЕТ
+                    </span>
+                {% elif booking.status == 'confirmed' %}
+                    <span style="color: #2ecc71; font-size: 13px; letter-spacing: 1px;">
+                        ✅ ПОДТВЕРЖДЕНО
+                    </span>
+                {% else %}
+                    <span style="color: #e74c3c; font-size: 13px; letter-spacing: 1px;">
+                        ❌ ОТМЕНЕНО
+                    </span>
+                {% endif %}
+                <p style="color: #c9a96e; font-size: 20px; margin-top: 8px;">
+                    {{ booking.service.price }} ₽
+                </p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <div style="text-align: center; background: #1a1a1a; padding: 60px; border: 1px solid #2a2a2a;">
+        <p style="color: #666; font-size: 18px; margin-bottom: 25px;">
+            У вас пока нет записей
+        </p>
+        <a href="/booking/" class="btn">Записаться на сеанс</a>
+    </div>
+    {% endif %}
+
+</section>
+
+{% endblock %}
