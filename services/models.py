@@ -4,8 +4,8 @@ from django.db import models
 class Service(models.Model):
     # Тип массажа — выбор из списка
     TYPE_CHOICES = [
-        ('classic', 'Классический'),
-        ('stone', 'Стоун'),
+        ('classic', 'Оздоровительный'),
+        ('relax', 'Релакс '),
         ('home', 'Выезд на дом'),
     ]
 

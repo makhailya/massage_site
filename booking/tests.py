@@ -14,7 +14,7 @@ class BookingModelTest(TestCase):
             password='testpass123'
         )
         self.service = Service.objects.create(
-            name='Классический массаж',
+            name='Оздоровительный массаж',
             service_type='classic',
             description='Тест',
             price=2000,
@@ -38,7 +38,7 @@ class BookingModelTest(TestCase):
         """Метод __str__ работает"""
         result = str(self.booking)
         self.assertIn('testclient', result)
-        self.assertIn('Классический массаж', result)
+        self.assertIn('Оздоровительный массаж', result)
 
     def test_booking_default_status(self):
         """Статус по умолчанию — pending"""
@@ -55,8 +55,8 @@ class BookingViewTest(TestCase):
             password='testpass123'
         )
         self.service = Service.objects.create(
-            name='Стоун массаж',
-            service_type='stone',
+            name='Релакс  массаж',
+            service_type='relax',
             description='Тест',
             price=3000,
             duration=90,

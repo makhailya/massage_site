@@ -9,7 +9,7 @@ class ServiceModelTest(TestCase):
         # setUp — запускается перед каждым тестом
         # Создаём тестовую услугу
         self.service = Service.objects.create(
-            name='Классический массаж',
+            name='Оздоровительный массаж',
             service_type='classic',
             description='Расслабляющий массаж',
             price=2000,
@@ -19,12 +19,12 @@ class ServiceModelTest(TestCase):
 
     def test_service_created(self):
         """Услуга создаётся корректно"""
-        self.assertEqual(self.service.name, 'Классический массаж')
+        self.assertEqual(self.service.name, 'Оздоровительный массаж')
         self.assertEqual(self.service.price, 2000)
 
     def test_service_str(self):
         """Метод __str__ возвращает правильную строку"""
-        expected = 'Классический массаж — 2000 руб.'
+        expected = 'Оздоровительный массаж — 2000 руб.'
         self.assertEqual(str(self.service), expected)
 
     def test_inactive_service(self):
@@ -41,8 +41,8 @@ class ServiceViewTest(TestCase):
     def setUp(self):
         self.client = Client()
         self.service = Service.objects.create(
-            name='Стоун массаж',
-            service_type='stone',
+            name='Релакс  массаж',
+            service_type='relax',
             description='Массаж горячими камнями',
             price=3000,
             duration=90,
@@ -62,11 +62,11 @@ class ServiceViewTest(TestCase):
     def test_service_in_list(self):
         """Услуга отображается на странице"""
         response = self.client.get('/services/')
-        self.assertContains(response, 'Стоун массаж')
+        self.assertContains(response, 'Релакс  массаж')
 
     def test_inactive_service_not_in_list(self):
         """Неактивная услуга не показывается на сайте"""
         self.service.is_active = False
         self.service.save()
         response = self.client.get('/services/')
-        self.assertNotContains(response, 'Стоун массаж')
+        self.assertNotContains(response, 'Релакс  массаж')

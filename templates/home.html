@@ -1,85 +1,340 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Массаж Илья Маханек{% endblock %}</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+{% extends 'base.html' %}
+{% load static %}
 
-        body {
-            font-family: 'Georgia', serif;
-            background: #0f0f0f;
-            color: #e8e0d5;
-        }
+{% block title %}Массаж — Илья Маханёк, Верхняя Пышма{% endblock %}
 
-        nav {
-            background: #1a1a1a;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #333;
-        }
+{% block content %}
 
-        nav .logo {
-            font-size: 22px;
-            color: #c9a96e;
-            letter-spacing: 2px;
-        }
-
-        nav a {
-            color: #e8e0d5;
-            text-decoration: none;
-            margin-left: 30px;
-            font-size: 15px;
-            letter-spacing: 1px;
-            transition: color 0.3s;
-        }
-
-        nav a:hover { color: #c9a96e; }
-
-        .btn {
-            background: #c9a96e;
-            color: #0f0f0f;
-            padding: 12px 30px;
-            border: none;
-            cursor: pointer;
-            font-size: 15px;
-            letter-spacing: 1px;
-            text-decoration: none;
-            display: inline-block;
-            transition: background 0.3s;
-        }
-
-        .btn:hover { background: #b8955a; }
-
-        footer {
-            text-align: center;
-            padding: 30px;
-            background: #1a1a1a;
-            color: #666;
-            margin-top: 60px;
-            border-top: 1px solid #333;
-        }
-    </style>
-</head>
-<body>
-
-<nav>
-    <span class="logo">✦ МАССАЖ</span>
-    <div>
-        <a href="/">Главная</a>
-        <a href="/services/">Услуги</a>
-        <a href="/booking/">Записаться</a>
+<!-- HERO секция с твоим фото -->
+<section style="
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    background: linear-gradient(135deg, #0f0f0f 0%, #1a1510 100%);
+">
+    <!-- Левая часть — текст -->
+    <div style="padding: 80px 60px;">
+        <p style="color: #c9a96e; letter-spacing: 4px; font-size: 13px; margin-bottom: 20px;">
+            ПРОФЕССИОНАЛЬНЫЙ МАССАЖ · ВЕРХНЯЯ ПЫШМА · БАЛТЫМ
+        </p>
+        <h1 style="font-size: 52px; font-weight: 300; line-height: 1.2; margin-bottom: 25px;">
+            Привет!<br>Меня зовут Илья
+        </h1>
+        <p style="color: #999; font-size: 17px; line-height: 1.8; margin-bottom: 20px;">
+            Я массажист, и я хочу напомнить вам о важности 
+            заботы о своём теле. Приглашаю вас на массаж, 
+            который подойдёт именно вам.
+        </p>
+        <p style="color: #c9a96e; font-size: 15px; margin-bottom: 35px;">
+            🎁 Новым клиентам скидка 20% на первый сеанс!
+        </p>
+        <div style="display: flex; gap: 15px;">
+            <a href="/booking/" class="btn">Записаться</a>
+            <a href="/services/" class="btn" style="
+                background: transparent; 
+                border: 1px solid #c9a96e; 
+                color: #c9a96e;
+            ">Услуги и цены</a>
+        </div>
+        <p style="color: #555; font-size: 14px; margin-top: 25px;">
+            📍 ЖК Балтым-Парк, Васильковая 9 · Выезд на дом
+        </p>
     </div>
-</nav>
 
-{% block content %}{% endblock %}
+    <!-- Правая часть — твоё фото -->
+    <div style="height: 100vh; overflow: hidden;">
+        <img 
+            src="{% static 'images/hero.jpg' %}" 
+            alt="Илья Маханёк — массажист"
+            style="
+                width: 100%; 
+                height: 100%; 
+                object-fit: cover;
+                object-position: center top;
+            "
+        >
+    </div>
+</section>
 
-<footer>
-    <p>© 2025 Илья Маханек · Верхняя Пышма · Массаж на дому и с выездом</p>
-</footer>
+<!-- УСЛУГИ — карточки -->
+<section style="padding: 100px 60px; max-width: 1200px; margin: 0 auto;">
+    <p style="color: #c9a96e; letter-spacing: 4px; font-size: 13px; margin-bottom: 15px; text-align: center;">
+        ВЫБЕРИТЕ СВОЙ МАССАЖ
+    </p>
+    <h2 style="text-align: center; font-size: 42px; font-weight: 300; margin-bottom: 60px;">
+        Что вам подходит?
+    </h2>
 
-</body>
-</html>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px;">
+
+        <!-- Карточка 1 -->
+        <div style="background: #1a1a1a; border: 1px solid #2a2a2a; padding: 35px;">
+            <div style="font-size: 32px; margin-bottom: 20px;">😢</div>
+            <h3 style="font-size: 20px; font-weight: 400; margin-bottom: 15px; color: #c9a96e;">
+                Болит спина?
+            </h3>
+            <p style="color: #888; line-height: 1.7; font-size: 15px;">
+                Оздоровительный массаж устранит боль, снимет 
+                напряжение в мышцах, улучшит качество сна 
+                и вернёт лёгкость телу.
+            </p>
+        </div>
+
+        <!-- Карточка 2 -->
+        <div style="background: #1a1a1a; border: 1px solid #2a2a2a; padding: 35px;">
+            <div style="font-size: 32px; margin-bottom: 20px;">💆‍♂️</div>
+            <h3 style="font-size: 20px; font-weight: 400; margin-bottom: 15px; color: #c9a96e;">
+                Хочется перезагрузки?
+            </h3>
+            <p style="color: #888; line-height: 1.7; font-size: 15px;">
+                Релакс + стоун-терапия выключает тревожный фон, 
+                топит напряжение и дарит ощущение невесомости. 
+                Тело лёгкое, голова ясная.
+            </p>
+        </div>
+
+        <!-- Карточка 3 -->
+        <div style="background: #1a1a1a; border: 1px solid #2a2a2a; padding: 35px;">
+            <div style="font-size: 32px; margin-bottom: 20px;">⚡</div>
+            <h3 style="font-size: 20px; font-weight: 400; margin-bottom: 15px; color: #c9a96e;">
+                Нужно восстановление?
+            </h3>
+            <p style="color: #888; line-height: 1.7; font-size: 15px;">
+                Перкуссионный массаж разгоняет застои, 
+                прорабатывает мышцы глубоко, снимает спазмы. 
+                Идеально после нагрузок или долгой работы сидя.
+            </p>
+        </div>
+
+        <!-- Карточка 4 -->
+        <div style="background: #1a1a1a; border: 1px solid #2a2a2a; padding: 35px;">
+            <div style="font-size: 32px; margin-bottom: 20px;">🔥</div>
+            <h3 style="font-size: 20px; font-weight: 400; margin-bottom: 15px; color: #c9a96e;">
+                Хотите похудеть?
+            </h3>
+            <p style="color: #888; line-height: 1.7; font-size: 15px;">
+                Антицеллюлитный массаж улучшает обмен веществ, 
+                сжигает жир и повышает эластичность кожи. 
+                Видимый результат уже через несколько сеансов.
+            </p>
+        </div>
+
+        <!-- Карточка 5 -->
+        <div style="background: #1a1a1a; border: 1px solid #2a2a2a; padding: 35px;">
+            <div style="font-size: 32px; margin-bottom: 20px;">🚗</div>
+            <h3 style="font-size: 20px; font-weight: 400; margin-bottom: 15px; color: #c9a96e;">
+                Удобнее дома?
+            </h3>
+            <p style="color: #888; line-height: 1.7; font-size: 15px;">
+                Приеду с профессиональным столом, маслами 
+                и горячими камнями. Тот же глубокий отдых, 
+                но вам никуда не нужно ехать после.
+            </p>
+        </div>
+
+        <!-- Карточка 6 -->
+        <div style="background: #1a1a1a; border: 1px solid #2a2a2a; padding: 35px;">
+            <div style="font-size: 32px; margin-bottom: 20px;">🥰</div>
+            <h3 style="font-size: 20px; font-weight: 400; margin-bottom: 15px; color: #c9a96e;">
+                Хотите максимум?
+            </h3>
+            <p style="color: #888; line-height: 1.7; font-size: 15px;">
+                К любому массажу добавьте обёртывание 
+                с разнообразными эффектами. 
+                И горячий чай в подарок ☕️
+            </p>
+        </div>
+
+    </div>
+</section>
+
+<!-- О СЕБЕ секция -->
+<section style="
+    padding: 100px 60px;
+    background: #111;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+">
+    <!-- Фото -->
+    <div style="
+        height: 500px;
+        overflow: hidden;
+        border: 1px solid #2a2a2a;
+    ">
+        <img 
+            src="{% static 'images/about.jpg' %}" 
+            alt="Илья за работой"
+            style="width: 100%; height: 100%; object-fit: cover;"
+        >
+    </div>
+
+    <!-- Текст -->
+    <div>
+        <p style="color: #c9a96e; letter-spacing: 4px; font-size: 13px; margin-bottom: 20px;">
+            ОБО МНЕ
+        </p>
+        <h2 style="font-size: 38px; font-weight: 300; margin-bottom: 25px;">
+            Илья Маханёк
+        </h2>
+        <p style="color: #888; line-height: 1.8; font-size: 16px; margin-bottom: 20px;">
+            Профессиональный массажист. Принимаю в ЖК Балтым-Парк 
+            и выезжаю на дом по Верхней Пышме и Екатеринбургу.
+        </p>
+        <p style="color: #888; line-height: 1.8; font-size: 16px; margin-bottom: 35px;">
+            К каждому сеансу — стоун-терапия горячими камнями 
+            в подарок и вкусный чай ☕️
+        </p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 35px;">
+            <div style="border-left: 2px solid #c9a96e; padding-left: 15px;">
+                <p style="color: #c9a96e; font-size: 24px;">🎁</p>
+                <p style="color: #888; font-size: 14px;">Скидка 20%<br>Новым клиентам</p>
+            </div>
+            <div style="border-left: 2px solid #c9a96e; padding-left: 15px;">
+                <p style="color: #c9a96e; font-size: 24px;">📍</p>
+                <p style="color: #888; font-size: 14px;">Васильковая 9<br>Выезд на дом</p>
+            </div>
+        </div>
+        <a href="/booking/" class="btn">Записаться на сеанс</a>
+    </div>
+</section>
+<!-- КОНТАКТЫ -->
+<section style="
+    padding: 80px 60px;
+    text-align: center;
+    background: linear-gradient(135deg, #0f0f0f 0%, #1a1510 100%);
+">
+    <p style="color: #c9a96e; letter-spacing: 4px; font-size: 13px; margin-bottom: 15px;">
+        СВЯЗАТЬСЯ СО МНОЙ
+    </p>
+    <h2 style="font-size: 38px; font-weight: 300; margin-bottom: 15px;">
+        Запись и вопросы
+    </h2>
+    <p style="color: #888; font-size: 16px; margin-bottom: 40px;">
+        Выберите удобный способ — отвечу быстро 🙂
+    </p>
+
+    <!-- Номер телефона -->
+    <a href="tel:+79126005161" style="
+        display: inline-block;
+        font-size: 32px;
+        color: #c9a96e;
+        text-decoration: none;
+        margin-bottom: 45px;
+        letter-spacing: 2px;
+        transition: opacity 0.3s;
+    " onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">
+        +7 912 600-51-61
+    </a>
+
+    <!-- Мессенджеры -->
+    <div style="display: flex; justify-content: center; gap: 25px; flex-wrap: wrap;">
+
+        <!-- Telegram -->
+        <a href="https://t.me/makhailya" target="_blank" style="
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            padding: 18px 30px;
+            text-decoration: none;
+            color: #e8e0d5;
+            font-size: 16px;
+            letter-spacing: 1px;
+            transition: border-color 0.3s, color 0.3s;
+        "
+        onmouseover="this.style.borderColor='#2AABEE'; this.style.color='#2AABEE'"
+        onmouseout="this.style.borderColor='#2a2a2a'; this.style.color='#e8e0d5'"
+        >
+            <!-- Иконка Telegram SVG -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.947l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.978.612z"/>
+            </svg>
+            Telegram
+        </a>
+
+        <!-- VK -->
+        <a href="https://vk.com/makhailya" target="_blank" style="
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            padding: 18px 30px;
+            text-decoration: none;
+            color: #e8e0d5;
+            font-size: 16px;
+            letter-spacing: 1px;
+            transition: border-color 0.3s, color 0.3s;
+        "
+        onmouseover="this.style.borderColor='#4C75A3'; this.style.color='#4C75A3'"
+        onmouseout="this.style.borderColor='#2a2a2a'; this.style.color='#e8e0d5'"
+        >
+            <!-- Иконка VK SVG -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12.785 16.241s.288-.032.436-.194c.136-.148.132-.427.132-.427s-.02-1.304.587-1.496c.598-.19 1.366 1.26 2.182 1.817.616.422 1.084.33 1.084.33l2.178-.03s1.139-.071.599-1.067c-.044-.076-.313-.66-1.611-1.865-1.359-1.26-1.176-1.057.46-3.238.998-1.329 1.396-2.142 1.271-2.49-.12-.332-.855-.244-.855-.244l-2.449.015s-.182-.025-.317.056c-.132.079-.217.262-.217.262s-.386 1.03-.903 1.905c-1.088 1.85-1.524 1.948-1.703 1.833-.414-.267-.31-1.075-.31-1.648 0-1.793.272-2.54-.529-2.733-.265-.064-.46-.106-1.138-.113-.87-.009-1.606.003-2.022.207-.277.136-.491.439-.361.456.161.021.527.099.721.363.25.341.241 1.107.241 1.107s.144 2.11-.335 2.372c-.329.18-.78-.187-1.748-1.86-.497-.858-.873-1.808-.873-1.808s-.072-.176-.202-.271c-.157-.115-.376-.151-.376-.151l-2.327.015s-.35.01-.478.162c-.114.135-.009.414-.009.414s1.821 4.265 3.882 6.414c1.891 1.973 4.039 1.843 4.039 1.843h.974z"/>
+            </svg>
+            VK
+        </a>
+
+        <!-- WhatsApp (бонус) -->
+        <a href="https://wa.me/79126005161" target="_blank" style="
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            padding: 18px 30px;
+            text-decoration: none;
+            color: #e8e0d5;
+            font-size: 16px;
+            letter-spacing: 1px;
+        "
+        onmouseover="this.style.borderColor='#25D366'; this.style.color='#25D366'"
+        onmouseout="this.style.borderColor='#2a2a2a'; this.style.color='#e8e0d5'"
+        >
+            <!-- Иконка WhatsApp SVG -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.117 1.528 5.845L.057 24l6.304-1.654A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm6.127 16.956c-.26.732-1.519 1.399-2.085 1.483-.534.079-1.209.112-1.951-.123-.45-.14-1.027-.328-1.765-.643-3.107-1.343-5.138-4.488-5.292-4.697-.153-.208-1.25-1.662-1.25-3.17 0-1.507.79-2.248 1.071-2.556.26-.277.566-.347.755-.347.188 0 .377.002.542.01.174.008.407-.066.637.486.24.576.814 1.986.886 2.131.072.146.12.317.024.511-.097.194-.145.315-.287.485-.143.17-.3.38-.428.51-.143.142-.292.297-.125.582.167.285.741 1.222 1.59 1.979 1.093.975 2.014 1.276 2.3 1.421.285.146.452.122.619-.073.167-.195.714-.834.905-1.12.19-.284.38-.237.642-.143.26.095 1.655.781 1.94.924.284.143.473.214.543.333.07.12.07.693-.19 1.425z"/>
+            </svg>
+            WhatsApp
+        </a>
+
+                <!-- MAX -->
+        <a href="https://max.ru/makhailya" target="_blank" style="
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            padding: 18px 30px;
+            text-decoration: none;
+            color: #e8e0d5;
+            font-size: 16px;
+            letter-spacing: 1px;
+        "
+        onmouseover="this.style.borderColor='#FF5500'; this.style.color='#FF5500'"
+        onmouseout="this.style.borderColor='#2a2a2a'; this.style.color='#e8e0d5'"
+        >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.5 14H15l-3-4-3 4H7.5l4-5.5L7.5 5H9l3 4 3-4h1.5l-4 5.5 4 5.5z"/>
+            </svg>
+            MAX
+        </a>
+
+    </div>
+
+    <p style="color: #555; font-size: 14px; margin-top: 40px;">
+        Или запишитесь онлайн прямо сейчас 👇
+    </p>
+    <a href="/booking/" class="btn" style="margin-top: 20px; display: inline-block;">
+        Записаться на сеанс
+    </a>
+</section>
+
+{% endblock %}

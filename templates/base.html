@@ -62,6 +62,7 @@
             margin-top: 60px;
             border-top: 1px solid #333;
         }
+
         input, select, textarea {
             width: 100%;
             background: #1a1a1a;
@@ -72,34 +73,117 @@
             font-family: 'Georgia', serif;
             outline: none;
             transition: border-color 0.3s;
-}
+        }
 
-input:focus, select:focus, textarea:focus {
-    border-color: #c9a96e;
-}
+        input:focus, select:focus, textarea:focus {
+            border-color: #c9a96e;
+        }
 
-select option {
-    background: #1a1a1a;
-}
+        select option {
+            background: #1a1a1a;
+        }
     </style>
 </head>
 <body>
 
+<!-- Топ-бар с контактами -->
+<div style="
+    background: #1a1a1a;
+    border-bottom: 1px solid #2a2a2a;
+    padding: 8px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+">
+    <span style="color: #666;">
+        📍 ЖК Балтым-Парк, Васильковая 9 · Верхняя Пышма
+    </span>
+
+    <div style="display: flex; align-items: center; gap: 20px;">
+
+        <a href="tel:+79126005161" style="
+            color: #c9a96e;
+            text-decoration: none;
+            letter-spacing: 1px;
+        ">+7 912 600-51-61</a>
+
+        <!-- Telegram -->
+        <a href="https://t.me/makhailya" target="_blank"
+           style="color: #666; text-decoration: none; transition: color 0.3s;"
+           onmouseover="this.style.color='#2AABEE'"
+           onmouseout="this.style.color='#666'"
+           title="Telegram">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.947l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.978.612z"/>
+            </svg>
+        </a>
+
+        <!-- VK -->
+        <a href="https://vk.com/makhailya" target="_blank"
+           style="color: #666; text-decoration: none; transition: color 0.3s;"
+           onmouseover="this.style.color='#4C75A3'"
+           onmouseout="this.style.color='#666'"
+           title="VK">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12.785 16.241s.288-.032.436-.194c.136-.148.132-.427.132-.427s-.02-1.304.587-1.496c.598-.19 1.366 1.26 2.182 1.817.616.422 1.084.33 1.084.33l2.178-.03s1.139-.071.599-1.067c-.044-.076-.313-.66-1.611-1.865-1.359-1.26-1.176-1.057.46-3.238.998-1.329 1.396-2.142 1.271-2.49-.12-.332-.855-.244-.855-.244l-2.449.015s-.182-.025-.317.056c-.132.079-.217.262-.217.262s-.386 1.03-.903 1.905c-1.088 1.85-1.524 1.948-1.703 1.833-.414-.267-.31-1.075-.31-1.648 0-1.793.272-2.54-.529-2.733-.265-.064-.46-.106-1.138-.113-.87-.009-1.606.003-2.022.207-.277.136-.491.439-.361.456.161.021.527.099.721.363.25.341.241 1.107.241 1.107s.144 2.11-.335 2.372c-.329.18-.78-.187-1.748-1.86-.497-.858-.873-1.808-.873-1.808s-.072-.176-.202-.271c-.157-.115-.376-.151-.376-.151l-2.327.015s-.35.01-.478.162c-.114.135-.009.414-.009.414s1.821 4.265 3.882 6.414c1.891 1.973 4.039 1.843 4.039 1.843h.974z"/>
+            </svg>
+        </a>
+
+        <!-- WhatsApp -->
+        <a href="https://wa.me/79126005161" target="_blank"
+           style="color: #666; text-decoration: none; transition: color 0.3s;"
+           onmouseover="this.style.color='#25D366'"
+           onmouseout="this.style.color='#666'"
+           title="WhatsApp">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.117 1.528 5.845L.057 24l6.304-1.654A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm6.127 16.956c-.26.732-1.519 1.399-2.085 1.483-.534.079-1.209.112-1.951-.123-.45-.14-1.027-.328-1.765-.643-3.107-1.343-5.138-4.488-5.292-4.697-.153-.208-1.25-1.662-1.25-3.17 0-1.507.79-2.248 1.071-2.556.26-.277.566-.347.755-.347.188 0 .377.002.542.01.174.008.407-.066.637.486.24.576.814 1.986.886 2.131.072.146.12.317.024.511-.097.194-.145.315-.287.485-.143.17-.3.38-.428.51-.143.142-.292.297-.125.582.167.285.741 1.222 1.59 1.979 1.093.975 2.014 1.276 2.3 1.421.285.146.452.122.619-.073.167-.195.714-.834.905-1.12.19-.284.38-.237.642-.143.26.095 1.655.781 1.94.924.284.143.473.214.543.333.07.12.07.693-.19 1.425z"/>
+            </svg>
+        </a>
+
+        <!-- MAX -->
+        <a href="https://max.ru/makhailya" target="_blank"
+           style="color: #666; text-decoration: none; transition: color 0.3s;"
+           onmouseover="this.style.color='#FF5500'"
+           onmouseout="this.style.color='#666'"
+           title="MAX">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.5 14H15l-3-4-3 4H7.5l4-5.5L7.5 5H9l3 4 3-4h1.5l-4 5.5 4 5.5z"/>
+            </svg>
+        </a>
+
+    </div>
+</div>
+
+<!-- Навигация -->
 <nav>
     <span class="logo">✦ МАССАЖ</span>
     <div>
         <a href="/">Главная</a>
         <a href="/services/">Услуги</a>
         <a href="/booking/">Записаться</a>
-            {% if user.is_authenticated %}
-        <a href="/account/">Мои записи</a>
-        <a href="/accounts/logout/" style="color: #c9a96e;">
-            Выйти ({{ user.username }})
-        </a>
-    {% else %}
-        <a href="/accounts/login/">Войти</a>
-        <a href="/accounts/register/">Регистрация</a>
-    {% endif %}
+        {% if user.is_authenticated %}
+            <a href="/account/">Мои записи</a>
+            <form method="post" action="/accounts/logout/" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" style="
+                    background: none;
+                    border: none;
+                    color: #c9a96e;
+                    cursor: pointer;
+                    font-size: 15px;
+                    font-family: 'Georgia', serif;
+                    letter-spacing: 1px;
+                    padding: 0;
+                    margin-left: 30px;
+                ">
+                    Выйти ({{ user.username }})
+                </button>
+            </form>
+        {% else %}
+            <a href="/accounts/login/">Войти</a>
+            <a href="/accounts/register/">Регистрация</a>
+        {% endif %}
     </div>
 </nav>
 

@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=200)),
-                ('service_type', models.CharField(choices=[('classic', 'Классический'), ('stone', 'Стоун'), ('home', 'Выезд на дом')], max_length=20)),
+                ('service_type', models.CharField(choices=[('classic', 'Оздоровительный'), ('relax', 'Релакс '), ('home', 'Выезд на дом')], max_length=20)),
                 ('description', models.TextField()),
                 ('price', models.PositiveIntegerField()),
                 ('duration', models.PositiveIntegerField()),
