@@ -4,13 +4,11 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-xy5cuubd58f^2_*h=854dd^j@ufes5tt%yx!ec+-$w@8vemyf8'
+SECRET_KEY = os.getenv('SECRET_KEY', 'fallback-key-change-me')
 
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',') if os.getenv('ALLOWED_HOSTS') else []
 
 
 INSTALLED_APPS = [
@@ -100,3 +98,4 @@ LOGIN_URL = '/accounts/login/'
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'   # папка для собранной статики
