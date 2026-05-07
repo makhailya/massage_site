@@ -69,6 +69,18 @@ class BookingViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'войти')
 
+    def test_booking_post_for_guest_redirects_to_login(self):
+        """Незалогиненный не может создать запись прямым POST-запросом"""
+        response = self.client.post('/booking/', {
+            'service': self.service.pk,
+            'date': '2026-06-15',
+            'time': '15:00',
+            'comment': 'Тестовая запись'
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+        self.assertEqual(Booking.objects.count(), 0)
+
     def test_account_page_requires_login(self):
         """Личный кабинет без входа — редирект"""
         response = self.client.get('/account/')

@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from .forms import BookingForm
 from .models import Booking
 
 def booking_create(request):
     if request.method == 'POST':
+        if not request.user.is_authenticated:
+            return redirect(f'{settings.LOGIN_URL}?next={request.path}')
         form = BookingForm(request.POST)
         if form.is_valid():
             booking = form.save(commit=False)
