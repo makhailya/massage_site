@@ -1,111 +1,251 @@
-# Сайт массажиста — Илья Маханёк
+# Massage Site
 
-Веб-сайт для продвижения услуг массажа с онлайн-записью клиентов.
+Веб-сайт массажиста Ильи Маханёка: лендинг, каталог услуг, онлайн-запись клиентов, личный кабинет и админ-панель.
+
+Проект сделан на Django и запускается в Docker-связке `Django + Gunicorn + Nginx + PostgreSQL`.
 
 ## Возможности
 
-- Каталог услуг с ценами
+- Главная страница с описанием услуг и контактами
+- Каталог услуг с ценами, длительностью и описанием
+- Регистрация и вход пользователей
 - Онлайн-запись на сеанс
-- Личный кабинет клиента
-- Панель администратора
+- Личный кабинет клиента с историей записей
+- Админ-панель Django для управления услугами и заявками
+- Docker Compose окружение для локального запуска и деплоя
+- Тесты на pytest с отчетом покрытия
 
-## Стек технологий
+## Стек
 
-- **Backend:** Django 6, PostgreSQL
-- **Frontend:** HTML, CSS
-- **Инфраструктура:** Docker, Docker Compose
-- **Тесты:** pytest, pytest-django, pytest-cov
+| Часть | Технологии |
+| --- | --- |
+| Backend | Python 3.13, Django 6 |
+| Database | PostgreSQL 15 |
+| Web server | Gunicorn, Nginx |
+| Frontend | HTML, CSS, Django Templates |
+| Infra | Docker, Docker Compose |
+| Tests | pytest, pytest-django, pytest-cov |
 
 ## Быстрый старт
 
-### 1. Клонируй репозиторий
+### 1. Клонировать проект
 
 ```bash
-git clone https://github.com/ТВОЙ_НИКНЕЙМ/massage_site.git
+git clone https://github.com/makhailya/massage_site.git
 cd massage_site
 ```
 
-### 2. Создай .env файл
+### 2. Создать `.env`
 
-```bash
+Создай файл `.env` в корне проекта:
+
+```env
 POSTGRES_DB=massage_db
 POSTGRES_USER=massage_user
 POSTGRES_PASSWORD=massage_pass
 POSTGRES_HOST=db
 POSTGRES_PORT=5432
-SECRET_KEY=твой-секретный-ключ
+
+SECRET_KEY=change-me-for-local-development
 DEBUG=True
 ALLOWED_HOSTS=localhost,127.0.0.1
 ```
 
-### 3. Запусти проект
+### 3. Запустить контейнеры
 
 ```bash
-docker compose up --build
+docker compose up --build -d
 ```
 
-### 4. Примени миграции
+### 4. Применить миграции
 
 ```bash
 docker compose exec web python manage.py migrate
 ```
 
-### 5. Создай администратора
+### 5. Создать администратора
 
 ```bash
 docker compose exec web python manage.py createsuperuser
 ```
 
-### 6. Открой браузер
+### 6. Открыть сайт
 
-http://localhost:8000        — сайт
-http://localhost:8000/admin  — админ-панель
+- Сайт: [http://localhost:8000](http://localhost:8000)
+- Админ-панель: [http://localhost:8000/admin](http://localhost:8000/admin)
 
-## Запуск тестов
+## Команды разработки
 
-Локально:
+Запуск проекта:
+
+```bash
+docker compose up -d
+```
+
+Остановка проекта:
+
+```bash
+docker compose down
+```
+
+Просмотр логов:
+
+```bash
+docker compose logs -f
+```
+
+Просмотр логов конкретного сервиса:
+
+```bash
+docker compose logs -f web
+docker compose logs -f nginx
+docker compose logs -f db
+```
+
+Повторная сборка после изменений зависимостей или Dockerfile:
+
+```bash
+docker compose up --build -d
+```
+
+Сборка статики:
+
+```bash
+docker compose exec web python manage.py collectstatic --noinput
+```
+
+## Тесты
+
+Локальный запуск:
 
 ```bash
 poetry run pytest
 ```
 
-Локально с покрытием:
+Локальный запуск с покрытием:
 
 ```bash
 poetry run pytest --cov=. --cov-report=term-missing
 ```
 
-В Docker-контейнере:
+Запуск тестов внутри Docker:
 
 ```bash
 docker compose exec web pytest --cov=. --cov-report=term-missing
 ```
 
-Если команда `docker compose exec ...` отвечает `EOF`, проверь, что контейнеры запущены:
+Текущий результат:
 
-```bash
-docker compose ps
-docker compose up --build
+```text
+15 passed
+TOTAL coverage: 88%
 ```
 
-Не добавляй строку `EOF` после команды. Это не часть команды запуска тестов.
+## Архитектура Docker
 
-Текущий результат локального запуска:
+Проект поднимает три сервиса:
+
+| Сервис | Назначение |
+| --- | --- |
+| `db` | PostgreSQL 15 |
+| `web` | Django-приложение под Gunicorn на порту `8000` внутри Docker-сети |
+| `nginx` | Внешний вход, проксирует запросы в `web` и отдает статику |
+
+Снаружи сайт доступен через Nginx:
+
+```text
+localhost:8000 -> nginx:80 -> web:8000
+```
+
+## Production
+
+Для production рекомендуется задать более строгий `.env`:
+
+```env
+POSTGRES_DB=massage_db
+POSTGRES_USER=massage_user
+POSTGRES_PASSWORD=strong-production-password
+POSTGRES_HOST=db
+POSTGRES_PORT=5432
+
+SECRET_KEY=long-random-secret-key
+DEBUG=False
+ALLOWED_HOSTS=makhailya.ru,localhost,127.0.0.1,SERVER_IP
+```
+
+Типовой деплой:
 
 ```bash
-15 passed, total coverage 88%
+git pull
+docker compose up --build -d
+docker compose exec web python manage.py migrate
+docker compose exec web python manage.py collectstatic --noinput
+```
+
+Если сайт должен открываться на стандартном HTTP-порту сервера, поменяй публикацию Nginx в `docker-compose.yml`:
+
+```yaml
+ports:
+  - "80:80"
+```
+
+После изменения портов пересоздай контейнер:
+
+```bash
+docker compose up -d
+```
+
+## Cloudflare Tunnel
+
+Cloudflare Tunnel можно добавить отдельно, если нужно открыть сайт в интернет без прямого проброса портов.
+
+Пример сервиса для `docker-compose.yml`:
+
+```yaml
+cloudflared:
+  image: cloudflare/cloudflared:latest
+  restart: unless-stopped
+  command: tunnel --no-autoupdate run --token YOUR_CLOUDFLARE_TUNNEL_TOKEN
+  depends_on:
+    - nginx
+  networks:
+    - app-network
+```
+
+В настройках Cloudflare Tunnel укажи публичное имя:
+
+```text
+makhailya.ru -> HTTP -> nginx:80
 ```
 
 ## Структура проекта
 
 ```text
 massage_site/
-├── config/          — настройки Django
-├── services/        — приложение услуг
-├── booking/         — приложение записей
-├── users/           — приложение пользователей
-├── templates/       — HTML шаблоны
-├── docker-compose.yml
-├── Dockerfile
+├── booking/              # Записи клиентов
+├── config/               # Настройки Django
+├── nginx/                # Конфигурация Nginx
+├── services/             # Услуги массажа
+├── static/               # Исходные статические файлы
+├── templates/            # HTML-шаблоны
+├── users/                # Регистрация пользователей
+├── docker-compose.yml    # Docker Compose окружение
+├── Dockerfile            # Образ Django/Gunicorn
+├── manage.py
+├── pyproject.toml        # Зависимости Poetry
 └── README.md
 ```
+
+## Полезные URL
+
+- `/` — главная страница
+- `/services/` — список услуг
+- `/booking/` — онлайн-запись
+- `/account/` — личный кабинет
+- `/accounts/login/` — вход
+- `/accounts/register/` — регистрация
+- `/admin/` — Django admin
+
+## Статус
+
+Проект находится в стадии MVP: основная бизнес-логика работает, тесты проходят, Docker-окружение настроено для локального запуска и дальнейшего деплоя.
