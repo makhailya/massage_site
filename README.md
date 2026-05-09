@@ -49,6 +49,7 @@ POSTGRES_PORT=5432
 SECRET_KEY=change-me-for-local-development
 DEBUG=True
 ALLOWED_HOSTS=localhost,127.0.0.1
+CSRF_TRUSTED_ORIGINS=http://localhost:8000,http://127.0.0.1:8000
 ```
 
 ### 3. Запустить контейнеры
@@ -171,6 +172,7 @@ POSTGRES_PORT=5432
 SECRET_KEY=long-random-secret-key
 DEBUG=False
 ALLOWED_HOSTS=makhailya.ru,localhost,127.0.0.1,SERVER_IP
+CSRF_TRUSTED_ORIGINS=https://makhailya.ru,http://makhailya.ru,http://SERVER_IP
 ```
 
 Типовой деплой:
