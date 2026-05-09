@@ -106,3 +106,64 @@ class BookingViewTest(TestCase):
         self.assertEqual(response.status_code, 302)
         # Запись реально создалась в базе
         self.assertEqual(Booking.objects.count(), 1)
+
+    def test_dashboard_requires_staff(self):
+        """Обычный пользователь не открывает панель управления"""
+        self.client.login(username='testclient', password='testpass123')
+        response = self.client.get('/dashboard/')
+        self.assertEqual(response.status_code, 302)
+
+    def test_dashboard_for_staff_user(self):
+        """Сотрудник видит панель управления с заявками"""
+        self.user.is_staff = True
+        self.user.save()
+        Booking.objects.create(
+            client=self.user,
+            service=self.service,
+            date='2026-06-15',
+            time='15:00',
+            comment='Тестовая запись'
+        )
+        self.client.login(username='testclient', password='testpass123')
+        response = self.client.get('/dashboard/')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Заявки на массаж')
+        self.assertContains(response, 'Тестовая запись')
+
+    def test_staff_can_update_booking_status(self):
+        """Сотрудник может изменить статус записи"""
+        self.user.is_staff = True
+        self.user.save()
+        booking = Booking.objects.create(
+            client=self.user,
+            service=self.service,
+            date='2026-06-15',
+            time='15:00',
+            status='pending'
+        )
+        self.client.login(username='testclient', password='testpass123')
+        response = self.client.post(f'/dashboard/update/{booking.id}/', {
+            'status': 'confirmed'
+        })
+        booking.refresh_from_db()
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(booking.status, 'confirmed')
+
+    def test_invalid_dashboard_status_is_ignored(self):
+        """Невалидный статус не сохраняется"""
+        self.user.is_staff = True
+        self.user.save()
+        booking = Booking.objects.create(
+            client=self.user,
+            service=self.service,
+            date='2026-06-15',
+            time='15:00',
+            status='pending'
+        )
+        self.client.login(username='testclient', password='testpass123')
+        response = self.client.post(f'/dashboard/update/{booking.id}/', {
+            'status': 'broken'
+        })
+        booking.refresh_from_db()
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(booking.status, 'pending')
