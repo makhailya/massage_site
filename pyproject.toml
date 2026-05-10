@@ -22,5 +22,25 @@ build-backend = "poetry.core.masonry.api"
 dev = [
     "pytest (>=9.0.3,<10.0.0)",
     "pytest-django (>=4.12.0,<5.0.0)",
-    "pytest-cov (>=7.1.0,<8.0.0)"
+    "pytest-cov (>=7.1.0,<8.0.0)",
+    "ruff (>=0.15.12,<0.16.0)",
+    "bandit (>=1.9.4,<2.0.0)"
 ]
+
+[tool.ruff]
+line-length = 88
+target-version = "py313"
+
+[tool.ruff.lint]
+select = [
+    "E",   # ошибки (как pycodestyle)
+    "F",   # pyflakes (неиспользуемые переменные и т.п.)
+    "I",   # сортировка импортов (isort)
+    "DJ",  # правила для Django (из flake8-django)
+    "N",   # pep8-naming (именование переменных/классов)
+    "UP",  # предложения по обновлению синтаксиса под новые версии Python
+]
+ignore = ["E501"]  # длину строк уже проверяет Black
+
+[tool.ruff.lint.isort]
+known-first-party = ["config", "booking", "services", "users"]

@@ -9,12 +9,21 @@ jobs:
   deploy:
     runs-on: self-hosted
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Lint & Security check
+        run: |
+          pip install ruff bandit
+          ruff check .
+          bandit -r . -x .venv,__pycache__,tests
 
       - name: Deploy to server
         run: |
@@ -31,3 +40,4 @@ jobs:
       - name: Clean up SSH key
         if: always()
         run: rm -f ~/.ssh/deploy_key
+        
