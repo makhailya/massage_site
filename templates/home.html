@@ -336,5 +336,231 @@
         Записаться на сеанс
     </a>
 </section>
+<!-- БЛОК С КАРТОЙ -->
+<section style="padding: 80px 60px; max-width: 1100px; margin: 0 auto;">
+    <p style="color: #c9a96e; letter-spacing: 4px; font-size: 13px; margin-bottom: 15px; text-align: center;">
+        КАК ДОБРАТЬСЯ
+    </p>
+    <h2 style="text-align: center; font-size: 38px; font-weight: 300; margin-bottom: 15px;">
+        Адрес приёма
+    </h2>
+    <p style="text-align: center; color: #888; font-size: 16px; margin-bottom: 40px;">
+        📍 г. Верхняя Пышма, с. Балтым, ул. Васильковая 9
+    </p>
 
+    <!-- Обёртка карты -->
+    <div style="position: relative; cursor: pointer;" onclick="showNavMenu()">
+
+        <!-- Карта через iframe -->
+        <div style="pointer-events: none;">
+            <iframe
+                src="https://yandex.ru/map-widget/v1/?ll=60.608383%2C56.987499&z=16&pt=60.608383%2C56.987499%2Cpm2rdm"
+                width="100%"
+                height="450"
+                frameborder="0"
+                style="display: block; border: 1px solid #2a2a2a; filter: grayscale(30%) brightness(0.85);"
+                allowfullscreen
+            ></iframe>
+        </div>
+
+        <!-- Оверлей поверх карты -->
+        <div style="
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 30px;
+            background: linear-gradient(to top, rgba(15,15,15,0.6) 0%, transparent 60%);
+        ">
+            <div style="
+                background: #c9a96e;
+                color: #0f0f0f;
+                padding: 14px 35px;
+                font-size: 15px;
+                letter-spacing: 1px;
+                font-family: 'Georgia', serif;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            ">
+                🗺️ Нажмите, чтобы построить маршрут
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- МОДАЛЬНОЕ ОКНО выбора навигатора -->
+<div id="navModal" style="
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+">
+    <div style="
+        background: #1a1a1a;
+        border: 1px solid #2a2a2a;
+        padding: 50px 40px;
+        max-width: 420px;
+        width: 90%;
+        text-align: center;
+        position: relative;
+    ">
+        <!-- Закрыть -->
+        <button onclick="closeNavMenu()" style="
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 22px;
+            cursor: pointer;
+        ">✕</button>
+
+        <p style="color: #c9a96e; letter-spacing: 3px; font-size: 12px; margin-bottom: 15px;">
+            ПОСТРОИТЬ МАРШРУТ
+        </p>
+        <h3 style="font-size: 22px; font-weight: 300; margin-bottom: 10px;">
+            Выберите приложение
+        </h3>
+        <p style="color: #666; font-size: 14px; margin-bottom: 35px;">
+            📍 Васильковая 9, Балтым
+        </p>
+
+        <!-- Кнопка Яндекс.Карты -->
+        <button onclick="openYandexMaps()" style="
+            width: 100%;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: #e8e0d5;
+            padding: 18px 25px;
+            font-size: 16px;
+            font-family: 'Georgia', serif;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            transition: border-color 0.3s;
+        "
+        onmouseover="this.style.borderColor='#c9a96e'"
+        onmouseout="this.style.borderColor='#333'"
+        >
+            <span style="font-size: 28px;">🗺️</span>
+            <div style="text-align: left;">
+                <div style="font-size: 16px;">Яндекс.Карты</div>
+                <div style="color: #666; font-size: 12px; margin-top: 3px;">Открыть в браузере или приложении</div>
+            </div>
+        </button>
+
+        <!-- Кнопка Яндекс.Навигатор -->
+        <button onclick="openYandexNavi()" style="
+            width: 100%;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: #e8e0d5;
+            padding: 18px 25px;
+            font-size: 16px;
+            font-family: 'Georgia', serif;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: border-color 0.3s;
+        "
+        onmouseover="this.style.borderColor='#c9a96e'"
+        onmouseout="this.style.borderColor='#333'"
+        >
+            <span style="font-size: 28px;">🧭</span>
+            <div style="text-align: left;">
+                <div style="font-size: 16px;">Яндекс.Навигатор</div>
+                <div style="color: #666; font-size: 12px; margin-top: 3px;">Открыть приложение навигатора</div>
+            </div>
+        </button>
+
+        <p id="geoStatus" style="color: #555; font-size: 13px; margin-top: 20px;">
+            ⏳ Определяем ваше местоположение...
+        </p>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+    // Координаты точки назначения — Васильковая 9, Балтым
+    const DEST_LAT = 56.987460;
+    const DEST_LON = 60.608180;
+
+    let userLat = null;
+    let userLon = null;
+
+    function showNavMenu() {
+        document.getElementById('navModal').style.display = 'flex';
+
+        // Запрашиваем геолокацию после клика
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function(pos) {
+                    userLat = pos.coords.latitude;
+                    userLon = pos.coords.longitude;
+                    document.getElementById('geoStatus').innerHTML =
+                        '✅ Местоположение определено — маршрут от вас';
+                    document.getElementById('geoStatus').style.color = '#2ecc71';
+                },
+                function() {
+                    document.getElementById('geoStatus').innerHTML =
+                        '📍 Геолокация недоступна — маршрут к точке назначения';
+                    document.getElementById('geoStatus').style.color = '#888';
+                }
+            );
+        } else {
+            document.getElementById('geoStatus').innerHTML =
+                '📍 Геолокация не поддерживается браузером';
+            document.getElementById('geoStatus').style.color = '#888';
+        }
+    }
+
+    function closeNavMenu() {
+        document.getElementById('navModal').style.display = 'none';
+    }
+
+    function openYandexMaps() {
+        let url;
+        if (userLat && userLon) {
+            // Маршрут от пользователя до адреса
+            url = `https://yandex.ru/maps/?rtext=${userLat},${userLon}~${DEST_LAT},${DEST_LON}&rtt=auto`;
+        } else {
+            // Только точка назначения
+            url = `https://yandex.ru/maps/?ll=${DEST_LON},${DEST_LAT}&z=16&pt=${DEST_LON},${DEST_LAT},pm2rdm`;
+        }
+        window.open(url, '_blank');
+        closeNavMenu();
+    }
+
+    function openYandexNavi() {
+        // Пробуем открыть приложение
+        const appUrl = `yandexnavi://build_route_on_map?lat_to=${DEST_LAT}&lon_to=${DEST_LON}`;
+        // Fallback на веб если приложение не установлено
+        const webUrl = userLat && userLon
+            ? `https://yandex.ru/maps/?rtext=${userLat},${userLon}~${DEST_LAT},${DEST_LON}&rtt=auto`
+            : `https://yandex.ru/maps/?ll=${DEST_LON},${DEST_LAT}&z=16&pt=${DEST_LON},${DEST_LAT},pm2rdm`;
+
+        // Открываем приложение, через 2 сек — веб если не сработало
+        window.location.href = appUrl;
+        setTimeout(function() {
+            window.open(webUrl, '_blank');
+        }, 2000);
+
+        closeNavMenu();
+    }
+
+    // Закрытие по клику на фон
+    document.getElementById('navModal').addEventListener('click', function(e) {
+        if (e.target === this) closeNavMenu();
+    });
+</script>
 {% endblock %}

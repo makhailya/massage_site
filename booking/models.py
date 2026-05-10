@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from services.models import Service
 
 class Booking(models.Model):
-
     STATUS_CHOICES = [
         ('pending', 'Ожидает подтверждения'),
         ('confirmed', 'Подтверждено'),
@@ -39,4 +38,3 @@ class Booking(models.Model):
     class Meta:
         verbose_name = 'Запись'
         verbose_name_plural = 'Записи'
-        

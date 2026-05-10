@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}Панель управления{% endblock %}
+
+{% block content %}
+
+<section style="padding: 60px 40px; max-width: 1100px; margin: 0 auto;">
+
+    <p style="color: #c9a96e; letter-spacing: 4px; font-size: 13px; margin-bottom: 15px;">
+        ПАНЕЛЬ УПРАВЛЕНИЯ
+    </p>
+    <h1 style="font-size: 38px; font-weight: 300; margin-bottom: 40px;">
+        Заявки на массаж
+    </h1>
+
+    <!-- Счётчики -->
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 50px;">
+        <div style="background: #1a1a1a; border: 1px solid #2a2a2a; padding: 25px; text-align: center;">
+            <p style="font-size: 36px; color: #f39c12; margin-bottom: 8px;">
+                {{ total_bookings }}
+            </p>
+            <p style="color: #666; font-size: 14px; letter-spacing: 1px;">ВСЕГО ЗАЯВОК</p>
+        </div>
+        <div style="background: #1a1a1a; border: 1px solid #2a2a2a; padding: 25px; text-align: center;">
+            <p style="font-size: 36px; color: #2ecc71; margin-bottom: 8px;">
+                {{ pending_bookings }}
+            </p>
+            <p style="color: #666; font-size: 14px; letter-spacing: 1px;">ОЖИДАЮТ</p>
+        </div>
+        <div style="background: #1a1a1a; border: 1px solid #2a2a2a; padding: 25px; text-align: center;">
+            <p style="font-size: 36px; color: #c9a96e; margin-bottom: 8px;">
+                {{ client_count }}
+            </p>
+            <p style="color: #666; font-size: 14px; letter-spacing: 1px;">КЛИЕНТОВ</p>
+        </div>
+    </div>
+
+    <!-- Таблица заявок -->
+    <div style="display: grid; gap: 15px;">
+        {% for booking in bookings %}
+        <div style="
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            padding: 25px 30px;
+            display: grid;
+            grid-template-columns: 2fr 2fr 1fr 2fr;
+            align-items: center;
+            gap: 20px;
+        ">
+            <!-- Клиент и услуга -->
+            <div>
+                <p style="font-size: 16px; margin-bottom: 5px;">
+                    👤 {{ booking.client.username }}
+                </p>
+                <p style="color: #c9a96e; font-size: 14px;">
+                    {{ booking.service.name }}
+                </p>
+            </div>
+
+            <!-- Дата и время -->
+            <div>
+                <p style="color: #888; font-size: 15px;">
+                    📅 {{ booking.date }} в {{ booking.time }}
+                </p>
+                {% if booking.comment %}
+                <p style="color: #555; font-size: 13px; margin-top: 5px;">
+                    💬 {{ booking.comment }}
+                </p>
+                {% endif %}
+            </div>
+
+            <!-- Цена -->
+            <div>
+                <p style="color: #c9a96e; font-size: 20px;">
+                    {{ booking.service.price }} ₽
+                </p>
+            </div>
+
+            <!-- Статус + кнопки -->
+            <div>
+                <form method="post" action="{% url 'booking_update_status' booking.id %}"
+                      style="display: flex; gap: 8px; align-items: center;">
+                    {% csrf_token %}
+                    <select name="status" style="
+                        background: #111;
+                        border: 1px solid #333;
+                        color: #e8e0d5;
+                        padding: 8px 12px;
+                        font-size: 13px;
+                        flex: 1;
+                    ">
+                        <option value="pending"
+                            {% if booking.status == 'pending' %}selected{% endif %}>
+                            ⏳ Ожидает
+                        </option>
+                        <option value="confirmed"
+                            {% if booking.status == 'confirmed' %}selected{% endif %}>
+                            ✅ Подтверждено
+                        </option>
+                        <option value="cancelled"
+                            {% if booking.status == 'cancelled' %}selected{% endif %}>
+                            ❌ Отменено
+                        </option>
+                    </select>
+                    <button type="submit" class="btn" style="padding: 8px 16px; font-size: 13px;">
+                        Сохранить
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% empty %}
+        <div style="text-align: center; padding: 60px; background: #1a1a1a; border: 1px solid #2a2a2a;">
+            <p style="color: #666; font-size: 18px;">Заявок пока нет</p>
+        </div>
+        {% endfor %}
+    </div>
+
+</section>
+
+{% endblock %}

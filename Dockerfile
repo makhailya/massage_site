@@ -7,7 +7,10 @@ RUN pip install poetry
 COPY pyproject.toml poetry.lock ./
 
 RUN poetry config virtualenvs.create false \
-    && poetry export -f requirements.txt --output requirements.txt --without-hashes \
-    && pip install -r requirements.txt
+    && poetry install --with dev --no-root
 
 COPY . .
+
+RUN python manage.py collectstatic --noinput
+
+CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]
