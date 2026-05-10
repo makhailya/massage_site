@@ -5,4 +5,3 @@ from .models import Booking
 class BookingAdmin(admin.ModelAdmin):
     list_display = ['client', 'service', 'date', 'time', 'status']
     list_filter = ['status', 'date']
-    

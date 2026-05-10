@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import BookingForm
 from .models import Booking
 
+
 def booking_create(request):
     if request.method == 'POST':
         if not request.user.is_authenticated:
