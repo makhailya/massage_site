@@ -21,9 +21,9 @@ class Booking(models.Model):
     comment = models.TextField(blank=True, verbose_name="Комментарий клиента")
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"{self.client} — {self.service} — {self.date}"
-
     class Meta:
         verbose_name = "Запись"
         verbose_name_plural = "Записи"
+
+    def __str__(self):
+        return f"{self.client} — {self.service} — {self.date}"

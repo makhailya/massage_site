@@ -16,9 +16,9 @@ class Service(models.Model):
     duration = models.PositiveIntegerField()  # Длительность в минутах
     is_active = models.BooleanField(default=True)  # Показывать на сайте?
 
-    def __str__(self):
-        return f"{self.name} — {self.price} руб."  # Как выглядит в админке
-
     class Meta:
         verbose_name = "Услуга"
         verbose_name_plural = "Услуги"
+
+    def __str__(self):
+        return f"{self.name} — {self.price} руб."  # Как выглядит в админке
