@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -33,9 +34,7 @@ def account(request):
     return render(request, "booking/account.html", {"bookings": bookings})
 
 
-@login_required(
-    login_url="/accounts/login/"
-)  # Требует обычный вход, редирект на пользовательский login
+@staff_member_required
 def dashboard(request):
     bookings = Booking.objects.select_related("client", "service").order_by(
         "-created_at"
