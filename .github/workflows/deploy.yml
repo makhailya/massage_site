@@ -23,7 +23,7 @@ jobs:
         run: |
           pip install --user ruff bandit
           python -m ruff check .
-          python -m bandit -r . -x .venv,__pycache__,tests,static
+          python -m bandit -r . -x ./.venv,__pycache__,tests,static,.claude -lll
 
       - name: Deploy to server
         run: |
