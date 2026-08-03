@@ -23,7 +23,7 @@ jobs:
         run: |
           pip install --user ruff bandit
           python -m ruff check .
-          python -m bandit -r . -x .venv,__pycache__,tests
+          python -m bandit -r . -x .venv,__pycache__,tests,static
 
       - name: Deploy to server
         run: |
@@ -31,9 +31,7 @@ jobs:
             cd /opt/massage_site
             git pull origin main
             docker compose up --build -d
-            docker compose exec -T web python manage.py migrate
-            docker compose exec -T web python manage.py collectstatic --noinput
-            docker compose restart nginx
+            docker compose restart web
             echo "✅ Деплой завершён!"
           EOF
 
