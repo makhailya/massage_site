@@ -1,6 +1,6 @@
 from fastapi.testclient import TestClient
 
-from app import app
+from app import _requests_log, app
 
 client = TestClient(app)
 
@@ -60,3 +60,24 @@ def test_invalid_name_rejected():
 def test_phone_too_short_rejected():
     response = client.post("/api/lead", json={"name": "Иван", "phone": "+7 (912) 600"})
     assert response.status_code == 422
+
+def test_rate_limit_blocks_after_limit(monkeypatch):
+    _requests_log.clear()
+
+    async def fake_send(name, phone):
+        pass
+
+    monkeypatch.setattr("app.send_telegram_message", fake_send)
+
+    for _ in range(3):
+        response = client.post(
+            "/api/lead",
+            json={"name": "Иван", "phone": "+7 (912) 600-51-61"},
+        )
+        assert response.status_code == 200
+
+    response = client.post(
+        "/api/lead",
+        json={"name": "Иван", "phone": "+7 (912) 600-51-61"},
+    )
+    assert response.status_code == 429

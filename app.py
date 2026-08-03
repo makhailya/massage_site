@@ -1,14 +1,19 @@
 import os
 import re
+import time
+from collections import defaultdict
 from pathlib import Path
 
 import httpx
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, field_validator
 
 BASE_DIR = Path(__file__).resolve().parent
+
+RATE_LIMIT_PER_MINUTE = 3
+_requests_log = defaultdict(list)
 
 app = FastAPI()
 
@@ -66,7 +71,16 @@ async def index():
 
 
 @app.post("/api/lead")
-async def create_lead(lead: LeadIn):
+async def create_lead(lead: LeadIn, request: Request):
+    client_ip = request.client.host if request.client else "unknown"
+
+    now = time.monotonic()
+    cutoff = now - 60
+    _requests_log[client_ip] = [t for t in _requests_log[client_ip] if t > cutoff]
+    if len(_requests_log[client_ip]) >= RATE_LIMIT_PER_MINUTE:
+        raise HTTPException(status_code=429, detail="Слишком много заявок, попробуйте позже")
+    _requests_log[client_ip].append(now)
+
     try:
         await send_telegram_message(lead.name, lead.phone)
     except RuntimeError as err:
