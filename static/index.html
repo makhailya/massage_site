@@ -83,9 +83,9 @@
         <div class="contact-grid">
             <div class="contact-links">
                 <a class="contact-link" href="tel:+79126005161">📞 +7 912 600-51-61</a>
-                <a class="contact-link" href="https://wa.me/79126005161" target="_blank">💬 WhatsApp</a>
-                <a class="contact-link" href="https://t.me/makhailya" target="_blank">✈️ Telegram</a>
-                <a class="contact-link" href="https://max.ru/makhailya" target="_blank">💠 MAX</a>
+                <a class="contact-link" href="https://wa.me/79126005161" target="_blank" rel="noopener">💬 WhatsApp</a>
+                <a class="contact-link" href="https://t.me/makhailya" target="_blank" rel="noopener">✈️ Telegram</a>
+                <a class="contact-link" href="https://max.ru/makhailya" target="_blank" rel="noopener">💠 MAX</a>
             </div>
             <form id="lead-form" class="lead-form">
                 <label>
@@ -97,12 +97,12 @@
                     <input type="tel" id="phone" name="phone" required placeholder="+7 (912) 000-00-00">
                 </label>
                 <button type="submit" class="btn btn-primary">Отправить заявку</button>
-                <p id="form-status" class="form-status"></p>
+                <p id="form-status" class="form-status" aria-live="polite"></p>
             </form>
-            <div id="form-success" class="form-success hidden">
+            <div id="form-success" class="form-success hidden" aria-live="polite">
                 <h3>Спасибо!</h3>
                 <p>Скоро свяжусь с вами.</p>
-                <a href="https://t.me/makhailya" target="_blank" class="btn btn-primary">Открыть Telegram</a>
+                <a href="https://t.me/makhailya" target="_blank" rel="noopener" class="btn btn-primary">Открыть Telegram</a>
             </div>
         </div>
     </section>
