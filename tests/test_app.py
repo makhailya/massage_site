@@ -51,3 +51,12 @@ def test_telegram_error_returns_502(monkeypatch):
         json={"name": "Иван", "phone": "+7 (912) 600-51-61"},
     )
     assert response.status_code == 502
+
+def test_invalid_name_rejected():
+    response = client.post("/api/lead", json={"name": "", "phone": "+7 (912) 600-51-61"})
+    assert response.status_code == 422
+
+
+def test_phone_too_short_rejected():
+    response = client.post("/api/lead", json={"name": "Иван", "phone": "+7 (912) 600"})
+    assert response.status_code == 422

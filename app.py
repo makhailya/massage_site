@@ -46,13 +46,17 @@ async def send_telegram_message(name: str, phone: str) -> None:
         raise RuntimeError("Telegram не настроен: TELEGRAM_BOT_TOKEN/TELEGRAM_CHAT_ID")
 
     text = f"📩 Новая заявка\n👤 {name}\n📞 {phone}"
-    async with httpx.AsyncClient() as client:
-        resp = await client.post(
-            f"https://api.telegram.org/bot{token}/sendMessage",
-            json={"chat_id": chat_id, "text": text},
-            timeout=10.0,
-        )
-    if resp.status_code != 200:
+    try:
+        async with httpx.AsyncClient() as client:
+            resp = await client.post(
+                f"https://api.telegram.org/bot{token}/sendMessage",
+                json={"chat_id": chat_id, "text": text},
+                timeout=10.0,
+            )
+    except httpx.HTTPError as err:
+        raise RuntimeError(f"Telegram недоступен: {err}") from err
+    data = resp.json()
+    if resp.status_code != 200 or not data.get("ok"):
         raise RuntimeError(f"Telegram API error: {resp.status_code}")
 
 
@@ -65,6 +69,6 @@ async def index():
 async def create_lead(lead: LeadIn):
     try:
         await send_telegram_message(lead.name, lead.phone)
-    except RuntimeError:
-        raise HTTPException(status_code=502, detail="Не удалось отправить заявку")
+    except RuntimeError as err:
+        raise HTTPException(status_code=502, detail="Не удалось отправить заявку") from err
     return {"ok": True}
