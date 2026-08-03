@@ -1,46 +1,10 @@
-[project]
-name = "massage-site"
-version = "0.1.0"
-description = ""
-authors = [
-    {name = "makhailya",email = "makhailya@gmail.com"}
-]
-requires-python = ">=3.13"
-dependencies = [
-    "django (>=6.0.4,<7.0.0)",
-    "psycopg2-binary (>=2.9.12,<3.0.0)",
-    "python-dotenv (>=1.2.2,<2.0.0)",
-    "gunicorn (>=22.0.0,<23.0.0)"
-]
-
-
-[build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
-
-[dependency-groups]
-dev = [
-    "pytest (>=9.0.3,<10.0.0)",
-    "pytest-django (>=4.12.0,<5.0.0)",
-    "pytest-cov (>=7.1.0,<8.0.0)",
-    "ruff (>=0.15.12,<0.16.0)",
-    "bandit (>=1.9.4,<2.0.0)"
-]
-
 [tool.ruff]
 line-length = 88
 target-version = "py313"
 
 [tool.ruff.lint]
-select = [
-    "E",   # ошибки (как pycodestyle)
-    "F",   # pyflakes (неиспользуемые переменные и т.п.)
-    "I",   # сортировка импортов (isort)
-    "DJ",  # правила для Django (из flake8-django)
-    "N",   # pep8-naming (именование переменных/классов)
-    "UP",  # предложения по обновлению синтаксиса под новые версии Python
-]
-ignore = ["E501"]  # длину строк уже проверяет Black
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["E501"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["config", "booking", "services", "users"]
+known-first-party = ["app"]
