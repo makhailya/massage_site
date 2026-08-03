@@ -6,6 +6,7 @@ __pycache__
 .idea
 .DS_Store
 .coverage
-.claude/
+.pytest_cache
+.ruff_cache
 .claude/
 .serena/
