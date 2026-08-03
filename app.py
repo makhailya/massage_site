@@ -72,7 +72,9 @@ async def index():
 
 @app.post("/api/lead")
 async def create_lead(lead: LeadIn, request: Request):
-    client_ip = request.client.host if request.client else "unknown"
+    client_ip = request.headers.get("CF-Connecting-IP") or (
+        request.client.host if request.client else "unknown"
+    )
 
     now = time.monotonic()
     cutoff = now - 60

@@ -1,8 +1,16 @@
+import pytest
 from fastapi.testclient import TestClient
 
 from app import _requests_log, app
 
 client = TestClient(app)
+
+
+@pytest.fixture(autouse=True)
+def clear_rate_limit_log():
+    _requests_log.clear()
+    yield
+    _requests_log.clear()
 
 
 def test_home_page():
