@@ -319,7 +319,7 @@
   }
   .contact__phone-number{
     font-family:"Unbounded",sans-serif;font-weight:500;
-    font-size:clamp(2.2rem,6vw,3.4rem);
+    font-size:clamp(1.9rem,5.2vw,3.4rem);
     line-height:1.1;letter-spacing:-.045em;
     font-variant-numeric:tabular-nums;
     border-bottom:1px solid rgba(243,241,235,.28);
