@@ -6,13 +6,7 @@
   gsap.registerPlugin(ScrollTrigger);
   gsap.defaults({ ease: "power3.out" });
 
-  var intro = gsap.timeline({ defaults: { duration: 0.9 } });
-  intro
-    .from(".top__inner > *", { y: -10, autoAlpha: 0, duration: 0.6, stagger: 0.07 })
-    .from(".hero__copy > *", { y: 26, autoAlpha: 0, stagger: 0.1 }, "-=.3")
-    .from(".portrait", { y: 24, scale: 0.95, autoAlpha: 0, duration: 1.1 }, "-=.7")
-    .from(".portrait [data-shape]", { scale: 0.6, autoAlpha: 0, duration: 1, stagger: 0.08 }, "-=.9")
-    .from(".portrait__badge", { y: 10, autoAlpha: 0, duration: 0.6 }, "-=.6");
+  // Keep the first screen static and visible; animate only the sections below.
 
   gsap.utils.toArray("[data-reveal]").forEach(function (el) {
     gsap.from(el, {
@@ -43,7 +37,8 @@
   });
 
   gsap.utils.toArray(".num").forEach(function (el) {
-    var target = parseInt(el.getAttribute("data-count"), 10);
+    // Read the visible HTML value so animated and static numbers stay consistent.
+    var target = Number.parseInt(el.textContent, 10);
     var value = { v: 0 };
 
     ScrollTrigger.create({

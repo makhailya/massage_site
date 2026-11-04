@@ -5,18 +5,22 @@
 GitHub Pages.
 
 В репозитории также сохранена прежняя версия на FastAPI (`app.py` + `static/`)
-с формой заявки в Telegram. Она не используется GitHub Pages и остаётся
-опциональной.
+с формой заявки в Telegram. Новый процесс публикации Pages не включает её
+в публичный пакет.
 
 ## Структура
 
 ```
 index.html              главная страница для GitHub Pages
+sitemap.xml             карта сайта для поисковых систем
 css/style.css           стили
 js/script.js            анимации появления (GSAP + ScrollTrigger)
-assets/images/hero.jpg  портрет
+assets/fonts/           локальные шрифты и лицензии
+assets/images/hero*     портрет в WebP и резервный JPEG
 assets/images/favicon.svg
-.nojekyll               отключает обработку Jekyll на GitHub Pages
+.github/workflows/pages.yml   публикация актуального лендинга
+.github/workflows/deploy.yml  отдельный серверный деплой FastAPI
+.nojekyll               отключает Jekyll при публикации из ветки
 static/                 прежняя версия, которую раздаёт FastAPI
 app.py                  FastAPI: POST /api/lead → Telegram
 ```
@@ -29,8 +33,8 @@ app.py                  FastAPI: POST /api/lead → Telegram
 python3 -m http.server 8000
 ```
 
-Открыть <http://localhost:8000/>. Файл `index.html` также открывается напрямую,
-но для загрузки шрифтов и GSAP нужен интернет.
+Открыть <http://localhost:8000/>. Шрифты загружаются локально. Интернет нужен
+для GSAP; без него содержимое страницы остаётся доступным.
 
 FastAPI-версия (опционально, нужны Python и `.env`):
 
@@ -46,15 +50,25 @@ Telegram через `POST /api/lead`.
 
 Репозиторий: <https://github.com/makhailya/massage_site> (публичный, GitHub Free).
 
-1. Отправить изменения в ветку `main` (после проверки и подтверждения).
-2. В GitHub открыть **Settings → Pages**.
-3. В **Build and deployment → Source** выбрать **Deploy from a branch**.
-4. Выбрать ветку **`main`** и папку **`/ (root)`**, нажать **Save**.
-5. Через 1–2 минуты сайт будет доступен по адресу:
-   <https://makhailya.github.io/massage_site/>
+При первом переходе на новый процесс публикации:
 
-Сборка не нужна: GitHub Pages публикует файлы как есть. `.nojekyll` уже
-добавлен, чтобы файлы и каталоги с `_` в начале имени не исключались.
+1. В GitHub открыть **Settings → Pages → Build and deployment → Source**
+   и выбрать **GitHub Actions**.
+2. Отправить согласованные изменения в ветку `main`. Изменения в `index.html`,
+   `sitemap.xml`, `css/`, `js/`, `assets/` или самом `pages.yml` запустят публикацию.
+   Если workflow уже в `main`, его также можно запустить вручную:
+   **Actions → Publish landing to GitHub Pages → Run workflow → main**.
+3. Дождаться успешного запуска и проверить главную страницу по адресу
+   <https://makhailya.github.io/massage_site/>. Старый адрес
+   `/massage_site/static/index.html` после публикации должен отвечать `404`.
+
+Сборка не нужна. `.github/workflows/pages.yml` копирует `index.html`,
+`sitemap.xml`, `css/`, `js/` и `assets/` в отдельный пакет. При добавлении
+нового публичного файла в корне лендинга его нужно явно добавить в пакет
+и в список путей, которые запускают публикацию.
+
+После публикации карта сайта будет доступна по адресу
+<https://makhailya.github.io/massage_site/sitemap.xml>.
 
 ### Важно про существующий деплой
 
@@ -82,10 +96,14 @@ npx html-validate index.html
 
 ## Технологии и внешние ресурсы
 
-- Шрифты: Onest и Unbounded через Google Fonts (лицензия SIL OFL).
+- Шрифты: локальные вариативные WOFF2 — Onest 400–500 и Unbounded 500–700.
+  Кириллица, латиница, цифры и пунктуация включены в два файла общим размером
+  около 79 КиБ. Запросы к Google Fonts не нужны. Источники и лицензии SIL OFL
+  находятся в `assets/fonts/`.
 - Анимации: GSAP 3.12.5 и ScrollTrigger с cdnjs (стандартная лицензия GSAP).
   При недоступном CDN контент остаётся видимым.
-- favicon и портрет — локальные файлы в `assets/images/`.
+- Favicon и портрет лежат в `assets/images/`. Браузер выбирает портрет WebP
+  шириной 360, 576 или 675 px. JPEG служит резервом для браузеров без WebP.
 
 ## Секреты
 
