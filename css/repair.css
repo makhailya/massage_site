@@ -432,6 +432,11 @@ h3 {
   line-height: 1.45;
 }
 
+.service-card__description {
+  margin-bottom: 16px;
+  color: var(--muted);
+}
+
 .service-card ul {
   display: grid;
   gap: 9px;
