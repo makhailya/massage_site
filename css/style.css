@@ -383,6 +383,17 @@
     display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px 24px;
     padding-block:22px;font-size:.82rem;color:var(--muted);
   }
+  .footer__inner nav{
+    display:flex;flex-wrap:wrap;align-items:center;gap:4px 18px;
+  }
+  .footer__inner nav a{
+    min-height:36px;display:inline-flex;align-items:center;
+    text-decoration:none;text-underline-offset:4px;
+  }
+  .footer__inner nav a[aria-current="page"]{
+    color:var(--ink);text-decoration:underline;text-decoration-color:var(--blue-deep);
+  }
+  .footer__inner nav a:hover{color:var(--ink)}
 
   /* ---------- responsive ---------- */
   @media (max-width:900px){

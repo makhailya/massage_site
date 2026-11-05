@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 520" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">Ноутбук и смартфон</title>
+  <desc id="desc">Иллюстрация устройств для направления по ремонту техники</desc>
+  <defs>
+    <linearGradient id="screen" x1="110" y1="100" x2="430" y2="360" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#183D68"/>
+      <stop offset="1" stop-color="#126B91"/>
+    </linearGradient>
+    <linearGradient id="phone" x1="416" y1="206" x2="559" y2="440" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#294A70"/>
+      <stop offset="1" stop-color="#13253D"/>
+    </linearGradient>
+    <linearGradient id="base" x1="90" y1="366" x2="434" y2="405" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#B9D4E6"/>
+      <stop offset="1" stop-color="#769AB4"/>
+    </linearGradient>
+  </defs>
+
+  <circle cx="318" cy="257" r="194" fill="#4A9DC7" fill-opacity=".08"/>
+  <circle cx="318" cy="257" r="150" stroke="#8BC7E8" stroke-opacity=".14"/>
+  <path d="M78 346V125c0-13.3 10.7-24 24-24h303c13.3 0 24 10.7 24 24v221" fill="#13263D" stroke="#AECFE2" stroke-width="8"/>
+  <rect x="94" y="118" width="319" height="213" rx="11" fill="url(#screen)"/>
+  <path d="M126 155h83" stroke="#B3D9EC" stroke-opacity=".72" stroke-width="5" stroke-linecap="round"/>
+  <path d="M126 175h51" stroke="#B3D9EC" stroke-opacity=".34" stroke-width="4" stroke-linecap="round"/>
+  <rect x="126" y="208" width="108" height="84" rx="9" fill="#8AC8E6" fill-opacity=".2" stroke="#9DD4ED" stroke-opacity=".55"/>
+  <path d="m145 267 23-28 17 17 18-26" stroke="#B7E7FA" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="251" y="209" width="133" height="12" rx="6" fill="#C1E2F2" fill-opacity=".64"/>
+  <rect x="251" y="235" width="112" height="8" rx="4" fill="#C1E2F2" fill-opacity=".3"/>
+  <rect x="251" y="255" width="126" height="8" rx="4" fill="#C1E2F2" fill-opacity=".3"/>
+  <rect x="251" y="275" width="79" height="8" rx="4" fill="#C1E2F2" fill-opacity=".3"/>
+  <circle cx="253" cy="112" r="2.5" fill="#86B8D2"/>
+  <path d="M54 350h397l-33 43H87l-33-43Z" fill="url(#base)" stroke="#D2E5F0" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M212 359h80l-8 11h-64l-8-11Z" fill="#4A6881" fill-opacity=".72"/>
+
+  <rect x="419" y="185" width="143" height="260" rx="29" fill="url(#phone)" stroke="#D6E8F4" stroke-width="5"/>
+  <rect x="429" y="199" width="123" height="233" rx="20" fill="#10253D"/>
+  <rect x="440" y="220" width="101" height="183" rx="13" fill="#1D4770"/>
+  <path d="M454 249h62" stroke="#C1E1F1" stroke-opacity=".7" stroke-width="4" stroke-linecap="round"/>
+  <path d="M454 266h44" stroke="#C1E1F1" stroke-opacity=".35" stroke-width="3" stroke-linecap="round"/>
+  <rect x="454" y="288" width="73" height="59" rx="8" fill="#70B7DC" fill-opacity=".25" stroke="#B1D8EB" stroke-opacity=".56"/>
+  <path d="m466 330 15-19 12 11 19-22" stroke="#B7E7FA" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="459" y="365" width="63" height="5" rx="2.5" fill="#B9D8E8" fill-opacity=".36"/>
+  <rect x="478" y="191" width="25" height="3" rx="1.5" fill="#9BBBD0"/>
+  <circle cx="491" cy="419" r="4" fill="#9BBBD0" fill-opacity=".7"/>
+  <circle cx="523" cy="153" r="5" fill="#8BC7E8" fill-opacity=".75"/>
+  <path d="M527 108v22m-11-11h22" stroke="#8BC7E8" stroke-opacity=".6" stroke-width="2" stroke-linecap="round"/>
+</svg>
