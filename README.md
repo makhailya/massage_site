@@ -71,12 +71,7 @@ Docker и `.env` не входят в пакет и не развёртываю�
 После публикации проверьте [главную страницу](https://makhailya.github.io/massage_site/)
 и [карту сайта](https://makhailya.github.io/massage_site/sitemap.xml).
 
-## Серверный деплой и секреты
-
-`.github/workflows/deploy.yml` запускается на self-hosted runner при изменении
-серверных файлов в `main`. На сервере Docker Compose собирает и запускает
-FastAPI и поддерживает отдельный контейнер Cloudflare Tunnel. Публикация на
-GitHub Pages выполняется независимо.
+## Настройки локального FastAPI
 
 Локальный `.env` исключён из Git. FastAPI использует в нём
 `TELEGRAM_BOT_TOKEN` и `TELEGRAM_CHAT_ID`; конфигурация Cloudflare Tunnel
