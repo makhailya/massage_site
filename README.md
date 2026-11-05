@@ -26,9 +26,8 @@
 | `assets/images/` | Favicon, иллюстрации, портрет и изображения для предпросмотра ссылок |
 | `sitemap.xml` | Карта трёх публичных страниц |
 | `.github/workflows/pages.yml` | Публикация статического сайта |
-| `app.py`, `static/` | Серверная версия на FastAPI с формой заявки в Telegram |
-| `Dockerfile`, `docker-compose.yml` | Контейнеры серверной версии и Cloudflare Tunnel |
-| `.github/workflows/deploy.yml` | Отдельный серверный деплой |
+| `app.py`, `static/` | FastAPI backend для локального запуска формы заявки |
+| `Dockerfile`, `docker-compose.yml` | Опциональная конфигурация Docker для FastAPI и Cloudflare Tunnel; не используется GitHub Pages |
 
 ## Локальный запуск
 
@@ -42,8 +41,9 @@ python3 -m http.server 8000 --bind 127.0.0.1
 На странице массажа GSAP и ScrollTrigger загружаются с cdnjs. При недоступном
 CDN контент остаётся видимым. Портрет использует адаптивные WebP с резервным JPEG.
 
-Для отдельного запуска FastAPI установите зависимости в активное виртуальное
-окружение и настройте `.env` по `.env.example`:
+Для локального запуска FastAPI (этот backend не входит в публикацию GitHub Pages)
+установите зависимости в активное виртуальное окружение и настройте `.env` по
+`.env.example`:
 
 ```bash
 uv pip install -r requirements-dev.txt
@@ -65,19 +65,15 @@ Run workflow → main**.
 Workflow копирует `index.html`, `sitemap.xml` и каталоги `massage/`, `repair/`,
 `css/`, `js/`, `assets/` в отдельный пакет и передаёт его GitHub Pages.
 При добавлении нового публичного файла или каталога верхнего уровня обновите
-список копирования и пути запуска в `pages.yml`. Серверный код, `static/`,
-файлы Docker и `.env` находятся за пределами этого пакета.
+список копирования и пути запуска в `pages.yml`. Backend-код, `static/`, файлы
+Docker и `.env` не входят в пакет и не развёртываются на этом сайте.
 
 После публикации проверьте [главную страницу](https://makhailya.github.io/massage_site/)
 и [карту сайта](https://makhailya.github.io/massage_site/sitemap.xml).
 
-## Серверный деплой и секреты
+## Настройки локального FastAPI
 
-`.github/workflows/deploy.yml` запускается на self-hosted runner при изменении
-серверных файлов в `main`. На сервере Docker Compose собирает и запускает
-FastAPI и поддерживает отдельный контейнер Cloudflare Tunnel. Публикация на
-GitHub Pages выполняется независимо.
-
-Локальный `.env` исключён из Git. В нём хранятся `TELEGRAM_BOT_TOKEN`,
-`TELEGRAM_CHAT_ID` и `CLOUDFLARED_TUNNEL_TOKEN`. Для `.env.example` используйте
-только примеры значений.
+Локальный `.env` исключён из Git. FastAPI использует в нём
+`TELEGRAM_BOT_TOKEN` и `TELEGRAM_CHAT_ID`; конфигурация Cloudflare Tunnel
+использует `CLOUDFLARED_TUNNEL_TOKEN`. В `.env.example` храните только примеры
+значений.
