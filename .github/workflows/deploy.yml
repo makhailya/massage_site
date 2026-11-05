@@ -1,5 +1,8 @@
 name: Deploy to Production
 
+permissions:
+  contents: read
+
 "on":
   push:
     branches:
@@ -19,13 +22,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Set up SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+        with:
+          persist-credentials: false
 
       - name: Lint & Security check
         run: |
@@ -34,15 +32,80 @@ jobs:
           python -m bandit -r . -x ./.venv,__pycache__,tests,static,.claude -lll
 
       - name: Deploy to server
+        shell: bash
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
         run: |
-          ssh -i ~/.ssh/deploy_key ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
+          set -euo pipefail
+          umask 077
+
+          fail() {
+            printf '::error::%s\n' "$1" >&2
+            exit 1
+          }
+
+          [[ -n "$SSH_KNOWN_HOSTS" ]] || fail "Required GitHub secret SSH_KNOWN_HOSTS is missing."
+          [[ -n "$SSH_PRIVATE_KEY" ]] || fail "Required GitHub secret SSH_PRIVATE_KEY is missing."
+          [[ -n "$SERVER_HOST" ]] || fail "Required GitHub secret SERVER_HOST is missing."
+          [[ -n "$SERVER_USER" ]] || fail "Required GitHub secret SERVER_USER is missing."
+          [[ "$SERVER_HOST" =~ ^[A-Za-z0-9._:-]+$ ]] || fail "SERVER_HOST must contain only a hostname or IP address."
+          [[ "$SERVER_USER" =~ ^[A-Za-z0-9._-]+$ ]] || fail "SERVER_USER contains unsupported characters."
+
+          ssh_port="${SSH_PORT:-22}"
+          [[ "$ssh_port" =~ ^[0-9]{1,5}$ ]] || fail "SSH_PORT must be a number from 1 to 65535."
+          ssh_port=$((10#$ssh_port))
+          (( ssh_port >= 1 && ssh_port <= 65535 )) || fail "SSH_PORT must be a number from 1 to 65535."
+
+          if (( ssh_port == 22 )); then
+            known_hosts_host="$SERVER_HOST"
+          else
+            known_hosts_host="[$SERVER_HOST]:$ssh_port"
+          fi
+
+          temp_root="${RUNNER_TEMP:-/tmp}"
+          ssh_temp_dir="$(mktemp -d "$temp_root/massage-site-ssh.XXXXXXXX")"
+          cleanup() {
+            rm -rf -- "$ssh_temp_dir"
+          }
+          trap cleanup EXIT
+          trap 'exit 129' HUP
+          trap 'exit 130' INT
+          trap 'exit 143' TERM
+          chmod 700 "$ssh_temp_dir"
+
+          known_hosts_file="$ssh_temp_dir/known_hosts"
+          ssh_key_file="$ssh_temp_dir/deploy_key"
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > "$known_hosts_file"
+          chmod 600 "$known_hosts_file"
+
+          if ! ssh-keygen -lf "$known_hosts_file" -E sha256 >/dev/null 2>&1 \
+            || ! ssh-keygen -F "$known_hosts_host" -f "$known_hosts_file" >/dev/null 2>&1; then
+            fail "SSH_KNOWN_HOSTS is invalid or has no host key for SERVER_HOST and SSH_PORT."
+          fi
+
+          printf '%s\n' "$SSH_PRIVATE_KEY" > "$ssh_key_file"
+          chmod 600 "$ssh_key_file"
+          if ! ssh-keygen -y -P '' -f "$ssh_key_file" >/dev/null 2>&1; then
+            fail "SSH_PRIVATE_KEY is invalid or is passphrase-protected."
+          fi
+
+          ssh \
+            -i "$ssh_key_file" \
+            -p "$ssh_port" \
+            -o "UserKnownHostsFile=$known_hosts_file" \
+            -o GlobalKnownHostsFile=/dev/null \
+            -o StrictHostKeyChecking=yes \
+            -o IdentitiesOnly=yes \
+            -o BatchMode=yes \
+            "$SERVER_USER@$SERVER_HOST" << 'EOF'
+            set -e
             cd /opt/massage_site
             git pull origin main
             docker compose up --build -d
             docker compose restart web
             echo "✅ Деплой завершён!"
           EOF
-
-      - name: Clean up SSH key
-        if: always()
-        run: rm -f ~/.ssh/deploy_key
