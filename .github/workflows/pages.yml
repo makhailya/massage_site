@@ -5,6 +5,7 @@ name: Publish landing to GitHub Pages
     branches: [main]
     paths:
       - index.html
+      - massage/**
       - sitemap.xml
       - css/**
       - js/**
@@ -47,7 +48,7 @@ jobs:
           set -euo pipefail
           mkdir -p "$PACKAGED_SITE"
           cp index.html sitemap.xml "$PACKAGED_SITE/"
-          cp -R css js assets "$PACKAGED_SITE/"
+          cp -R css js assets massage "$PACKAGED_SITE/"
 
       - name: Upload public files
         uses: actions/upload-pages-artifact@v5.0.0
