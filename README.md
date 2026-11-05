@@ -1,112 +1,83 @@
-# Илья Маханек — массаж · Верхняя Пышма
+# MAKHAILYA
 
-Одностраничный лендинг массажиста. Основная версия — **статический сайт**
-(HTML5, CSS3, Vanilla JS) без сборки, backend и базы данных. Публикуется на
-GitHub Pages.
+Статический сайт на HTML, CSS и JavaScript. GitHub Pages публикует три страницы
+без этапа сборки.
 
-В репозитории также сохранена прежняя версия на FastAPI (`app.py` + `static/`)
-с формой заявки в Telegram. Новый процесс публикации Pages не включает её
-в публичный пакет.
+| Адрес на GitHub Pages | Страница |
+| --- | --- |
+| `/massage_site/` | Главная с выбором направления — массаж или ремонт техники |
+| `/massage_site/massage/` | Услуги массажа, цены, информация о специалисте и контакты |
+| `/massage_site/repair/` | Ремонт и настройка компьютеров и смартфонов, обслуживание ПО и домашних сетей |
+
+Старые ссылки на главную с якорями `#services`, `#about`, `#help`, `#contact`
+и `#top` открывают соответствующие разделы страницы массажа с исходными
+параметрами запроса. При отключённом JavaScript на главной доступны обычные
+ссылки на оба направления и на разделы массажа.
 
 ## Структура
 
-```
-index.html              главная страница для GitHub Pages
-sitemap.xml             карта сайта для поисковых систем
-css/style.css           стили
-js/script.js            анимации появления (GSAP + ScrollTrigger)
-assets/fonts/           локальные шрифты и лицензии
-assets/images/hero*     портрет в WebP и резервный JPEG
-assets/images/favicon.svg
-.github/workflows/pages.yml   публикация актуального лендинга
-.github/workflows/deploy.yml  отдельный серверный деплой FastAPI
-.nojekyll               отключает Jekyll при публикации из ветки
-static/                 прежняя версия, которую раздаёт FastAPI
-app.py                  FastAPI: POST /api/lead → Telegram
-```
+| Путь | Назначение |
+| --- | --- |
+| `index.html`, `massage/index.html`, `repair/index.html` | Три публичные страницы |
+| `css/home.css`, `css/style.css`, `css/repair.css` | Стили главной, массажа и ремонта соответственно |
+| `js/home.js` | Перенаправление старых якорных ссылок |
+| `js/script.js` | Анимации страницы массажа через GSAP и ScrollTrigger |
+| `assets/fonts/` | Локальные шрифты Onest и Unbounded и их лицензии SIL OFL |
+| `assets/images/` | Favicon, иллюстрации, портрет и изображения для предпросмотра ссылок |
+| `sitemap.xml` | Карта трёх публичных страниц |
+| `.github/workflows/pages.yml` | Публикация статического сайта |
+| `app.py`, `static/` | Серверная версия на FastAPI с формой заявки в Telegram |
+| `Dockerfile`, `docker-compose.yml` | Контейнеры серверной версии и Cloudflare Tunnel |
+| `.github/workflows/deploy.yml` | Отдельный серверный деплой |
 
 ## Локальный запуск
 
-Статическая версия (рекомендуется):
+Для просмотра статического сайта запустите из корня репозитория:
 
 ```bash
-python3 -m http.server 8000
+python3 -m http.server 8000 --bind 127.0.0.1
 ```
 
-Открыть <http://localhost:8000/>. Шрифты загружаются локально. Интернет нужен
-для GSAP; без него содержимое страницы остаётся доступным.
+Откройте <http://localhost:8000/>. Шрифты и изображения загружаются локально.
+На странице массажа GSAP и ScrollTrigger загружаются с cdnjs. При недоступном
+CDN контент остаётся видимым. Портрет использует адаптивные WebP с резервным JPEG.
 
-FastAPI-версия (опционально, нужны Python и `.env`):
+Для отдельного запуска FastAPI установите зависимости в активное виртуальное
+окружение и настройте `.env` по `.env.example`:
 
 ```bash
 uv pip install -r requirements-dev.txt
 uvicorn app:app --reload
 ```
 
-Открыть <http://localhost:8000>. Форма на этой версии отправляет заявку в
-Telegram через `POST /api/lead`.
+Откройте <http://localhost:8000/>. Форма отправляет заявку в Telegram через
+`POST /api/lead`. Оба примера используют порт 8000, поэтому запускайте их по
+очереди.
 
 ## Публикация на GitHub Pages
 
-Репозиторий: <https://github.com/makhailya/massage_site> (публичный, GitHub Free).
+В настройках репозитория откройте **Settings → Pages → Build and deployment →
+Source** и выберите **GitHub Actions**. Workflow **Publish landing to GitHub
+Pages** запускается при отправке изменений в `main` по путям из `pages.yml`.
+Ручной запуск доступен в **Actions → Publish landing to GitHub Pages →
+Run workflow → main**.
 
-При первом переходе на новый процесс публикации:
+Workflow копирует `index.html`, `sitemap.xml` и каталоги `massage/`, `repair/`,
+`css/`, `js/`, `assets/` в отдельный пакет и передаёт его GitHub Pages.
+При добавлении нового публичного файла или каталога верхнего уровня обновите
+список копирования и пути запуска в `pages.yml`. Серверный код, `static/`,
+файлы Docker и `.env` находятся за пределами этого пакета.
 
-1. В GitHub открыть **Settings → Pages → Build and deployment → Source**
-   и выбрать **GitHub Actions**.
-2. Отправить согласованные изменения в ветку `main`. Изменения в `index.html`,
-   `sitemap.xml`, `css/`, `js/`, `assets/` или самом `pages.yml` запустят публикацию.
-   Если workflow уже в `main`, его также можно запустить вручную:
-   **Actions → Publish landing to GitHub Pages → Run workflow → main**.
-3. Дождаться успешного запуска и проверить главную страницу по адресу
-   <https://makhailya.github.io/massage_site/>. Старый адрес
-   `/massage_site/static/index.html` после публикации должен отвечать `404`.
+После публикации проверьте [главную страницу](https://makhailya.github.io/massage_site/)
+и [карту сайта](https://makhailya.github.io/massage_site/sitemap.xml).
 
-Сборка не нужна. `.github/workflows/pages.yml` копирует `index.html`,
-`sitemap.xml`, `css/`, `js/` и `assets/` в отдельный пакет. При добавлении
-нового публичного файла в корне лендинга его нужно явно добавить в пакет
-и в список путей, которые запускают публикацию.
+## Серверный деплой и секреты
 
-После публикации карта сайта будет доступна по адресу
-<https://makhailya.github.io/massage_site/sitemap.xml>.
+`.github/workflows/deploy.yml` запускается на self-hosted runner при изменении
+серверных файлов в `main`. На сервере Docker Compose собирает и запускает
+FastAPI и поддерживает отдельный контейнер Cloudflare Tunnel. Публикация на
+GitHub Pages выполняется независимо.
 
-### Важно про существующий деплой
-
-`.github/workflows/deploy.yml` — отдельный workflow для FastAPI на
-self-hosted runner. Он запускается при пуше в `main` и деплоит серверную
-версию. GitHub Pages от него не зависит. Если серверный деплой больше не
-нужен, workflow можно отключить отдельно в **Actions**.
-
-## Проверки
-
-```bash
-npx html-validate index.html
-```
-
-Перед публикацией проверено:
-
-- HTML — без ошибок (html-validate и W3C Nu Validator);
-- нет горизонтального скролла на 360, 390, 768, 1024 и 1440 px;
-- нет ошибок в консоли браузера;
-- все локальные пути относительные и открываются из поддиректории
-  (`/massage_site/`), как на GitHub Pages;
-- контент виден без JavaScript, при `prefers-reduced-motion` и при
-  недоступном CDN;
-- axe-core (WCAG 2.1/2.2 AA) — без нарушений.
-
-## Технологии и внешние ресурсы
-
-- Шрифты: локальные вариативные WOFF2 — Onest 400–500 и Unbounded 500–700.
-  Кириллица, латиница, цифры и пунктуация включены в два файла общим размером
-  около 79 КиБ. Запросы к Google Fonts не нужны. Источники и лицензии SIL OFL
-  находятся в `assets/fonts/`.
-- Анимации: GSAP 3.12.5 и ScrollTrigger с cdnjs (стандартная лицензия GSAP).
-  При недоступном CDN контент остаётся видимым.
-- Favicon и портрет лежат в `assets/images/`. Браузер выбирает портрет WebP
-  шириной 360, 576 или 675 px. JPEG служит резервом для браузеров без WebP.
-
-## Секреты
-
-`.env` не коммитится (см. `.gitignore`). В нём хранятся
-`TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` и `CLOUDFLARED_TUNNEL_TOKEN`.
-Не добавляйте реальные значения в `.env.example`, README и код.
+Локальный `.env` исключён из Git. В нём хранятся `TELEGRAM_BOT_TOKEN`,
+`TELEGRAM_CHAT_ID` и `CLOUDFLARED_TUNNEL_TOKEN`. Для `.env.example` используйте
+только примеры значений.
