@@ -1,9 +1,17 @@
 name: Deploy to Production
 
-on:
+"on":
   push:
     branches:
       - main
+    paths:
+      - 'app.py'
+      - 'static/**'
+      - 'requirements.txt'
+      - 'pyproject.toml'
+      - 'Dockerfile'
+      - '.dockerignore'
+      - 'docker-compose.yml'
 
 jobs:
   deploy:
