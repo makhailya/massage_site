@@ -454,6 +454,15 @@
     .contact h2,.contact__line{max-width:90%}
   }
 
+  @media (max-width:660px){
+    .top__inner{gap:12px}
+    .top__nav{
+      flex:1;flex-wrap:wrap;
+      column-gap:clamp(12px,3vw,18px);row-gap:4px;
+    }
+    .top__cta{flex:none}
+  }
+
   @media (max-width:700px){
     .steps__list{grid-template-columns:1fr;gap:26px;padding-left:0}
     .steps__line{left:8px;right:auto;top:8px;bottom:10px;width:1px;height:auto}
