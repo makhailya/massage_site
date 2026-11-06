@@ -1,7 +1,7 @@
 # MAKHAILYA
 
-Статический сайт на HTML, CSS и JavaScript. GitHub Pages публикует три страницы
-без этапа сборки.
+Публичный сайт полностью статический: HTML, CSS, JavaScript и ресурсы. GitHub
+Pages публикует три страницы без этапа сборки.
 
 | Адрес на GitHub Pages | Страница |
 | --- | --- |
@@ -12,7 +12,7 @@
 Старые ссылки на главную с якорями `#services`, `#about`, `#help`, `#contact`
 и `#top` открывают соответствующие разделы страницы массажа с исходными
 параметрами запроса. При отключённом JavaScript на главной доступны обычные
-ссылки на оба направления и на разделы массажа.
+ссылки на оба направления и разделы массажа.
 
 ## Структура
 
@@ -25,55 +25,85 @@
 | `assets/fonts/` | Локальные шрифты Onest и Unbounded и их лицензии SIL OFL |
 | `assets/images/` | Favicon, иллюстрации, портрет и изображения для предпросмотра ссылок |
 | `sitemap.xml` | Карта трёх публичных страниц |
-| `.github/workflows/pages.yml` | Публикация статического сайта |
-| `app.py`, `static/` | FastAPI backend для локального запуска формы заявки |
-| `Dockerfile`, `docker-compose.yml` | Опциональная конфигурация Docker для FastAPI и Cloudflare Tunnel; не используется GitHub Pages |
+| `.github/workflows/pages.yml` | Публикация статического сайта на GitHub Pages |
+| `app.py`, `static/` | Необязательное FastAPI-приложение: отдельно отдаёт `static/index.html` и ресурсы из `static/` |
+| `requirements.txt`, `requirements-dev.txt`, `tests/test_app.py` | Зависимости приложения, разработки и существующие тесты |
+| `Dockerfile`, `docker-compose.yml` | Необязательная конфигурация Docker для FastAPI и Cloudflare Tunnel; GitHub Pages её не использует |
+| `.env.example` | Образец переменных окружения без секретных значений |
 
-## Локальный запуск
+## Локальный просмотр публичного сайта
 
-Для просмотра статического сайта запустите из корня репозитория:
+Из корня репозитория запустите простой HTTP-сервер:
 
 ```bash
 python3 -m http.server 8000 --bind 127.0.0.1
 ```
 
 Откройте <http://localhost:8000/>. Шрифты и изображения загружаются локально.
-На странице массажа GSAP и ScrollTrigger загружаются с cdnjs. При недоступном
-CDN контент остаётся видимым. Портрет использует адаптивные WebP с резервным JPEG.
+GSAP и ScrollTrigger на странице массажа загружаются с cdnjs; при недоступном
+CDN контент остаётся видимым. Портрет использует адаптивные WebP с резервным
+JPEG.
 
-Для локального запуска FastAPI (этот backend не входит в публикацию GitHub Pages)
-установите зависимости в активное виртуальное окружение и настройте `.env` по
-`.env.example`:
+## Необязательный локальный FastAPI
+
+FastAPI — отдельный компонент для локального запуска формы заявки. Его маршрут
+`/` отдаёт `static/index.html`, а не корневой `index.html`, который GitHub Pages
+публикует как главную. FastAPI, каталог `static/` и Docker-файлы не входят в
+пакет публичного сайта.
+
+Создайте виртуальное окружение и установите зависимости из корня репозитория:
 
 ```bash
-uv pip install -r requirements-dev.txt
-uvicorn app:app --reload
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements-dev.txt
+cp -n .env.example .env
 ```
 
-Откройте <http://localhost:8000/>. Форма отправляет заявку в Telegram через
-`POST /api/lead`. Оба примера используют порт 8000, поэтому запускайте их по
-очереди.
+Заполните в `.env` значения `TELEGRAM_BOT_TOKEN` и `TELEGRAM_CHAT_ID`. Затем
+загрузите переменные в текущую оболочку и запустите приложение:
+
+```bash
+set -a
+. ./.env
+set +a
+python -m uvicorn app:app --reload --host 127.0.0.1 --port 8000
+```
+
+Команда `. ./.env` читает файл в текущую оболочку, а `set -a` экспортирует
+заданные в нём переменные для FastAPI; менять исходный код не нужно. Локальный
+файл `.env` исключён из Git. Не помещайте в репозиторий реальные токены.
+Если файл загружается через shell, значения со специальными символами
+(например, пробелами, `$` или `#`) заключайте в одинарные кавычки или
+экранируйте по правилам shell.
+Переменная `CLOUDFLARED_TUNNEL_TOKEN` из `.env.example` нужна только для
+необязательной конфигурации Cloudflare Tunnel в Docker. После запуска откройте
+<http://localhost:8000/>. Форма отправляет заявку в Telegram через
+`POST /api/lead`. Для просмотра публичного сайта и FastAPI используется один
+порт 8000 — запускайте их по очереди.
+
+## Тесты
+
+После установки зависимостей и активации виртуального окружения запустите
+существующие тесты из корня репозитория:
+
+```bash
+python -m pytest
+```
 
 ## Публикация на GitHub Pages
 
 В настройках репозитория откройте **Settings → Pages → Build and deployment →
 Source** и выберите **GitHub Actions**. Workflow **Publish landing to GitHub
-Pages** запускается при отправке изменений в `main` по путям из `pages.yml`.
-Ручной запуск доступен в **Actions → Publish landing to GitHub Pages →
-Run workflow → main**.
+Pages** запускается при отправке изменений в `main` по путям, указанным в
+`pages.yml`. Ручной запуск доступен в **Actions → Publish landing to GitHub
+Pages → Run workflow → main**.
 
-Workflow копирует `index.html`, `sitemap.xml` и каталоги `massage/`, `repair/`,
-`css/`, `js/`, `assets/` в отдельный пакет и передаёт его GitHub Pages.
-При добавлении нового публичного файла или каталога верхнего уровня обновите
-список копирования и пути запуска в `pages.yml`. Backend-код, `static/`, файлы
-Docker и `.env` не входят в пакет и не развёртываются на этом сайте.
+Workflow копирует корневые файлы `index.html` и `sitemap.xml`, а также каталоги
+`massage/`, `repair/`, `css/`, `js/` и `assets/` целиком в отдельный пакет
+GitHub Pages. Если добавите публичный файл или каталог верхнего уровня,
+обновите список копирования и пути запуска в `pages.yml`. Backend-код,
+`static/`, Docker-файлы и `.env` в пакет не входят.
 
 После публикации проверьте [главную страницу](https://makhailya.github.io/massage_site/)
 и [карту сайта](https://makhailya.github.io/massage_site/sitemap.xml).
-
-## Настройки локального FastAPI
-
-Локальный `.env` исключён из Git. FastAPI использует в нём
-`TELEGRAM_BOT_TOKEN` и `TELEGRAM_CHAT_ID`; конфигурация Cloudflare Tunnel
-использует `CLOUDFLARED_TUNNEL_TOKEN`. В `.env.example` храните только примеры
-значений.
