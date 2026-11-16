@@ -5,6 +5,7 @@ const submitBtn = form.querySelector('button[type="submit"]');
 
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (submitBtn.disabled) return;
     status.textContent = '';
     submitBtn.disabled = true;
 
@@ -32,3 +33,9 @@ form.addEventListener('submit', async (e) => {
         submitBtn.disabled = false;
     }
 });
+
+// Enable personal-data entry only after the submit handler is registered.
+form.querySelectorAll('input, button[type="submit"]').forEach((control) => {
+    control.disabled = false;
+});
+document.getElementById('form-unavailable').hidden = true;

@@ -87,16 +87,18 @@
                 <a class="contact-link" href="https://t.me/makhailya" target="_blank" rel="noopener">✈️ Telegram</a>
                 <a class="contact-link" href="https://max.ru/makhailya" target="_blank" rel="noopener">💠 MAX</a>
             </div>
-            <form id="lead-form" class="lead-form">
+            <form id="lead-form" class="lead-form" method="post">
                 <label>
                     Ваше имя
-                    <input type="text" id="name" name="name" maxlength="100" required placeholder="Иван">
+                    <input type="text" id="name" name="name" maxlength="100" disabled required placeholder="Иван">
                 </label>
                 <label>
                     Телефон
-                    <input type="tel" id="phone" name="phone" required placeholder="+7 (912) 000-00-00">
+                    <input type="tel" id="phone" name="phone" disabled required placeholder="+7 (912) 000-00-00">
                 </label>
-                <button type="submit" class="btn btn-primary">Отправить заявку</button>
+                <button type="submit" class="btn btn-primary" disabled>Отправить заявку</button>
+                <p id="form-unavailable">Если форма недоступна, <a href="tel:+79126005161">позвоните +7 912 600-51-61</a> или <a href="https://t.me/makhailya" target="_blank" rel="noopener">напишите в Telegram</a>.</p>
+                <noscript><p>Для отправки формы нужен JavaScript. Свяжитесь со мной по телефону или в Telegram.</p></noscript>
                 <p id="form-status" class="form-status" aria-live="polite"></p>
             </form>
             <div id="form-success" class="form-success hidden" aria-live="polite">
